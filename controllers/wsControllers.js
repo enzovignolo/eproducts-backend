@@ -1,6 +1,7 @@
 const Archivo = require(`${__dirname}/../utils/Archivo`);
-const db = new Archivo(`${__dirname}/../db/products.txt`);
+
 const dbMsgs = new Archivo(`${__dirname}/../db/messages.txt`);
+const db = require(`${__dirname}/../db/db`);
 
 /**
  *
@@ -10,7 +11,7 @@ const dbMsgs = new Archivo(`${__dirname}/../db/messages.txt`);
 exports.getTable = async () => {
 	try {
 		//Search the products
-		const products = await db.readData();
+		const products = await db('products').select();
 		let message;
 		if (!products) {
 			message = 'There are no products loaded';
@@ -47,7 +48,7 @@ exports.updateMessages = async (msg) => {
 		const dateTimeMsg = `${dateTime.getDate()} ${
 			months[dateTime.getMonth()]
 		} | ${dateTime.getHours()}:${dateTime.getMinutes()}`;
-		await dbMsgs.saveData({ ...msg, date: dateTimeMsg });
+		await db('messages').insert({ ...msg, date: dateTimeMsg });
 		//
 	} catch (err) {
 		console.log(err);
@@ -59,7 +60,7 @@ exports.updateMessages = async (msg) => {
  */
 exports.getMessages = async () => {
 	try {
-		const messages = await dbMsgs.readData();
+		const messages = await db('messages').select();
 		return messages;
 	} catch (err) {
 		console.log(err);

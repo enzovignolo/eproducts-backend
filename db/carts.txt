@@ -1,1 +1,1 @@
-[{"id":1,"products":[{"id":3,"name":"DVD","price":"45","thumbnail":"https://cdn3.iconfinder.com/data/icons/flatforlinux/128/19-DVD.png","amount":1}],"createdAt":"2021-08-12T09:57:29.788Z"}]
+[{"id":1,"products":[],"createdAt":"2021-08-12T09:57:29.788Z"}]

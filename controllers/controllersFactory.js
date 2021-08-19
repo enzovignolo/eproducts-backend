@@ -2,11 +2,15 @@
 Intended for reusing repetitive code.
 Here we can have normal CRUD operations over a DB Model in a simpler way
  */
-
-exports.getAll = async (req, res, next, Model) => {
+const db = require(`${__dirname}/../db/db`);
+exports.getAll = async (req, res, next, model) => {
 	try {
 		//Try to get all the products and send them if success
-		const data = await Model.readData();
+
+		const data = await db.select().table(model);
+
+		console.log(data);
+		//const data = await Model.readData();
 		if (!data) {
 			const error = new Error('No data was loaded');
 			error.stCode = 404;
@@ -21,37 +25,39 @@ exports.getAll = async (req, res, next, Model) => {
 		next(err);
 	}
 };
-exports.addOne = async (req, res, next, Model) => {
+exports.addOne = async (req, res, next, model) => {
 	try {
 		const newEntry = req.body;
 		//Add timestamp to the entry
-		newEntry.createdAt = new Date().toISOString();
+		//newEntry.createdAt = new Date().toISOString();
 		//Write new entry
-		const data = await Model.saveData(newEntry);
+		//const data = await Model.saveData(newEntry);
+		console.log(Object.keys(newEntry));
+		const data = await db(model).insert(newEntry);
 		//If the function did not return a product, there was an error
 		if (!data) throw new Error('Error writting in the DB');
 
 		res.status(201).json({
 			status: 'success',
-			...data,
 		});
 	} catch (err) {
 		next(err);
 	}
 };
 
-exports.updateOne = async (req, res, next, Model) => {
+exports.updateOne = async (req, res, next, model) => {
 	try {
 		const id = req.params.id;
 		const data = req.body;
 		//Check first if the product exists
-		if (!(await Model.findDataById(id))) {
+		/* if (!(await Model.findDataById(id))) {
 			const error = new Error('There is no product with that id');
 			error.stCode = 404;
 			throw error;
-		}
+		} */
 		//Update it
-		const updatedEntry = await Model.findByIdAndUpdate(id, data);
+		/* const updatedEntry = await Model.findByIdAndUpdate(id, data); */
+		const updatedEntry = await db(model).where('id', id).update(data);
 		res.status(201).json({
 			status: 'success',
 			...updatedEntry,
@@ -60,17 +66,21 @@ exports.updateOne = async (req, res, next, Model) => {
 		next(err);
 	}
 };
-exports.deleteOne = async (req, res, next, Model) => {
+exports.deleteOne = async (req, res, next, model) => {
 	try {
 		const id = req.params.id;
 		//Check if the product exists
-		if (!(await Model.findDataById(id))) {
+		const data = await db.where('id', id).select().table(model);
+		/* if (!(await Model.findDataById(id))) { */
+		console.log(data);
+		if (data.length <= 0) {
 			const error = new Error('There is no element with that id');
 			error.stCode = 404;
 			throw error;
 		}
 		//Delete it
-		const deletedEntry = await Model.findByIdAndDelete(id);
+		//const deletedEntry = await Model.findByIdAndDelete(id);
+		const deletedEntry = await db(model).where('id', id).del();
 		res.status(200).json({
 			status: 'success',
 			deleted: deletedEntry,
@@ -80,20 +90,46 @@ exports.deleteOne = async (req, res, next, Model) => {
 	}
 };
 
-exports.getOne = async (req, res, next, Model) => {
+exports.getOne = async (req, res, next, model) => {
 	try {
 		const id = req.params.id;
 		//Looks for the product
-		const data = await Model.findDataById(id);
+		//const data = await Model.findDataById(id);
+		let data;
+		if (model != 'carts') {
+			data = await db.where('id', id).select().table(model);
+		} else {
+			const productsOnCart = await db
+				.from('cart_product')
+				.innerJoin(
+					'products',
+					'cart_product.product_id',
+					'products.id'
+				)
+				.select(
+					'products.id',
+					'products.name',
+					'products.price',
+					'products.stock',
+					'products.thumbnail'
+				)
+				.where('cart_product.cart_id', id);
+			let cart = [];
+			productsOnCart.forEach((product) => {
+				cart.push(product);
+			});
+			data = { cartId: id, products: cart };
+		}
 		//Sent error if there is no product
-		if (!data) {
+		console.log(data);
+		if (data.length <= 0) {
 			const error = new Error('There is no element with that id');
 			error.stCode = 404;
 			throw error;
 		}
 		res.status(200).json({
 			status: 'success',
-			...data,
+			data,
 		});
 	} catch (err) {
 		next(err);
