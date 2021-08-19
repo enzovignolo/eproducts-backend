@@ -1,0 +1,81 @@
+<%- include('layouts/header')%>
+<%- include('partials/navbar')%> 
+<!-- FORM TO ADD A PRODUCT -->
+<div class="container-fluid" style="padding:0%">
+  <div class="product-form bg-light">
+    
+    <div class="row" >
+      <div class="col-sm-12">
+        <div class ='addProductForm ' style="margin:50px; ">
+        <form action="/addProduct" id='addProductForm' method="POST">
+          <fieldset>
+            <div class="form-row">
+              <div class="form-group col-sm-5">
+                <label for="productName" class="form-label mt-4">Product name</label>
+                <input name="name" type="text" class="form-control " id="productName"  placeholder="Enter product name" required>
+                <small class="form-text text-muted">Please add the product name as you want to be shown on the table.</small>
+              </div>
+              
+              <div class="form-groupcol-sm-4">
+                <label for="productPrice" class="form-label mt-4">Product price</label>
+                <input name="price" type="number" min=0 step=0.01 class="form-control " id="productPrice"  placeholder="Enter price on pesos" required>
+                <small class="form-text text-muted">Please add the product price on pesos.</small>
+              </div>
+  
+            </div>
+            <div class="form-row  ">
+              <div class="form-group col-5">
+                <label for="productThumbnail" class="form-label mt-4">Product thumbnail</label>
+                <input name="thumbnail" type="text" class="form-control" id="productName"  placeholder="Enter product image" required>
+                <small  class="form-text text-muted">Add a url for the thumbnail</small>
+              </div>
+             
+            </div>
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">Add product</button>
+  
+            </div>
+          </fieldset>
+        </form>
+        </div>
+    
+        </div>
+        </div>
+  </div>
+  
+  <!-- PRODUC TABLE -->
+  <div class='row'>
+    <div id='product-table'></div>
+    
+  </div>
+  <div class="chat col-sm-12  chat-container" style="background-color: #ded6ea;">
+      <%- include('chat.ejs')%>
+    
+  </div>
+  
+</div>
+
+<!--   <script src="helpers/ejs.min.js"></script> -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- <script src="updateTable.js"></script> -->
+  <script>
+  //Here we stablish the socket connection
+  var socket = io();
+  //Then add an eventListener to the form, 
+  //so it triggers the event in to the socket and the backend can hear it
+  const addForm = document.getElementById('addProductForm');
+  addForm.addEventListener('submit',(e)=>{
+    //emit to the backend
+    socket.emit('update table');
+  });
+  //This is the reaction to the event emitted from the backend
+  socket.on('update table',function(data){
+    const html = updateTable(data);
+    
+    document.getElementById('product-table').innerHTML = html;
+    
+      }) 
+  </script>
+
+</div>
+<%- include('layouts/footer')%>

@@ -1,0 +1,47 @@
+<%- include('layouts/header'); %>
+<%- include('partials/navbar'); %>
+
+<br><br>
+
+<div style="text-align: center;"  >
+  <h1><strong> Products</strong> </h1>
+  
+</div>
+<br><br>
+<div id="product">
+
+</div>
+<%if (message){ %>
+<div class="alert alert-dismissible alert-warning">
+  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  <h4 class="alert-heading">Warning!</h4>
+  <p class="mb-0">There are no products loaded. If you want, you can <a href="/addProduct" class="alert-link">add a new product</a> to the list.</p>
+</div>
+<%}%>
+<div >
+<% if(products){ %>
+<table class="table table-hover justify-content-center table-striped table-md">
+  <thead>
+    <tr class=" table-primary">
+      
+      <th class="text-center align-middle " scope="col">Image</th>
+      <th class="text-center align-middle " scope="col">Name</th>
+      <th class="text-center align-middle " scope="col">Price</th>
+    </tr>
+  </thead>
+  <tbody >
+    <% products.forEach(function(product){ %>
+    <tr class="table-light "">
+      <td class="text-center align-middle "><img src="<%=product.thumbnail%>" alt="<%=product.name%> image" width="50" height="50"></td>
+      <td class="text-center align-middle " scope="row"><%=product.name%></th>
+      <td class="text-center align-middle ">$<%=product.price%></td>
+   
+    </tr>
+<%});%>
+    
+<% } %>
+  </tbody>
+</table>
+</div>
+
+<%- include('layouts/footer'); %>
