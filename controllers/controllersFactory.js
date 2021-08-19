@@ -9,8 +9,6 @@ exports.getAll = async (req, res, next, model) => {
 
 		const data = await db.select().table(model);
 
-		console.log(data);
-		//const data = await Model.readData();
 		if (!data) {
 			const error = new Error('No data was loaded');
 			error.stCode = 404;
@@ -27,12 +25,9 @@ exports.getAll = async (req, res, next, model) => {
 };
 exports.addOne = async (req, res, next, model) => {
 	try {
+		//Gets the new entry to the DB from the body
 		const newEntry = req.body;
-		//Add timestamp to the entry
-		//newEntry.createdAt = new Date().toISOString();
-		//Write new entry
-		//const data = await Model.saveData(newEntry);
-		console.log(Object.keys(newEntry));
+
 		const data = await db(model).insert(newEntry);
 		//If the function did not return a product, there was an error
 		if (!data) throw new Error('Error writting in the DB');
@@ -49,15 +44,15 @@ exports.updateOne = async (req, res, next, model) => {
 	try {
 		const id = req.params.id;
 		const data = req.body;
-		//Check first if the product exists
-		/* if (!(await Model.findDataById(id))) {
-			const error = new Error('There is no product with that id');
-			error.stCode = 404;
-			throw error;
-		} */
-		//Update it
+		//Check first if exist an entrey with that id
+
 		/* const updatedEntry = await Model.findByIdAndUpdate(id, data); */
 		const updatedEntry = await db(model).where('id', id).update(data);
+		if (!updatedEntry) {
+			const err = new Error(`Wrong id for ${model}`);
+			err.stCode = 404;
+			throw err;
+		}
 		res.status(201).json({
 			status: 'success',
 			...updatedEntry,
@@ -71,7 +66,7 @@ exports.deleteOne = async (req, res, next, model) => {
 		const id = req.params.id;
 		//Check if the product exists
 		const data = await db.where('id', id).select().table(model);
-		/* if (!(await Model.findDataById(id))) { */
+
 		console.log(data);
 		if (data.length <= 0) {
 			const error = new Error('There is no element with that id');
@@ -79,11 +74,10 @@ exports.deleteOne = async (req, res, next, model) => {
 			throw error;
 		}
 		//Delete it
-		//const deletedEntry = await Model.findByIdAndDelete(id);
 		const deletedEntry = await db(model).where('id', id).del();
 		res.status(200).json({
 			status: 'success',
-			deleted: deletedEntry,
+			deleted: data,
 		});
 	} catch (err) {
 		next(err);
@@ -120,8 +114,7 @@ exports.getOne = async (req, res, next, model) => {
 			});
 			data = { cartId: id, products: cart };
 		}
-		//Sent error if there is no product
-		console.log(data);
+
 		if (data.length <= 0) {
 			const error = new Error('There is no element with that id');
 			error.stCode = 404;

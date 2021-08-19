@@ -1,1 +1,0 @@
-[{"id":1,"user":"enzo@coder.com","message":"Hola, probando","date":"3 Aug | 1:38"},{"id":2,"user":"admin@products.com","message":"Probando con el server compilado en TS","date":"4 Aug | 19:41"},{"id":3,"user":"enzo@coder.com","message":"ahora probando con el server transpilado desde Babel","date":"4 Aug | 19:43"}]

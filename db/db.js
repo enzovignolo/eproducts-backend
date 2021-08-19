@@ -1,5 +1,8 @@
 const knex = require('knex');
-
+/**
+ * This creates an instance for the configuration
+ * to the DB
+ */
 const db = knex({
 	client: 'mysql',
 	connection: {
