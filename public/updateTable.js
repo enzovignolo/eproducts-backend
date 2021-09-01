@@ -13,6 +13,8 @@ function updateTable(data) {
 				
 				<th class="text-center align-middle " scope="col">Image</th>
 				<th class="text-center align-middle " scope="col">Name</th>
+				<th class="text-center align-middle " scope="col">Category</th>
+				<th class="text-center align-middle " scope="col">Stock</th>
 				<th class="text-center align-middle " scope="col">Price</th>
 			  </tr>
 			</thead>
@@ -21,6 +23,8 @@ function updateTable(data) {
 			  <tr class="table-light ">
 				<td class="text-center align-middle "><img src="<%=product.thumbnail%>" alt="<%=product.name%> image" width="50" height="50"></td>
 				<td class="text-center align-middle " scope="row"><%=product.name%></th>
+				<td class="text-center align-middle " scope="row"><%=product.category%></th>
+				<td class="text-center align-middle " scope="row"><%=product.stock%></th>
 				<td class="text-center align-middle ">$<%=product.price%></td>
 			 
 			  </tr>

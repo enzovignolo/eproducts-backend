@@ -1,14 +1,17 @@
 const express = require('express');
-const dotenv = require('dotenv');
 const cors = require('cors');
+const ErrorCreator = require(`${__dirname}/utils/ErrorCreator.js`);
+const errorController = require(`${__dirname}/controllers/errorController.js`);
+/**
+ * Load routes
+ */
 const productRoutes = require(`${__dirname}/routes/productRoutes`);
 const cartRoutes = require(`${__dirname}/routes/cartRoutes`);
 const authRoutes = require(`${__dirname}/routes/authRoutes`);
 const viewRoutes = require(`${__dirname}/routes/viewRoutes`);
 
-//
+//Initializing the app
 
-dotenv.config();
 const app = express();
 
 //Security middlewares
@@ -32,20 +35,14 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/', viewRoutes);
 //This is for unkown routes ERROR 404
 app.use((req, res, next) => {
-	const error = new Error(`Route ${req.originalUrl} does not exist`);
-	error.stCode = 404;
-	next(error);
+	/* const error = new Error(`Route ${req.originalUrl} does not exist`);
+	error.stCode = 404; */
+	next(new ErrorCreator('This route does not exist', 404));
 });
+
 //Error middleware
 app.use((err, req, res, next) => {
-	console.log(err);
-	err.stCode = err.stCode || 500;
-	err.stMessage =
-		err.stCode == 500 ? 'Somethign went wrong' : err.message;
-	res.status(err.stCode).json({
-		status: 'error',
-		error: err.stMessage,
-	});
+	errorController.handleErrors(err, req, res, next);
 });
 
 module.exports = app;

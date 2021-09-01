@@ -1,3 +1,4 @@
+const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
 exports.login = (req, res, next) => {
 	/* In the future, here will be the login
 	 */
@@ -15,12 +16,13 @@ exports.isAdmin = (req, res, next) => {
 	/**
 	 * Here we check if the user has the admin privilegies
 	 */
-	console.log(req.headers.user);
 	if (req.headers.user !== 'admin') {
-		res.status(403).json({
-			status: 'error',
-			error: 'You need admin privilegies to acces this route',
-		});
+		next(
+			new ErrorCreator(
+				'You need admin privilegies to access this route',
+				403
+			)
+		);
 	} else {
 		next();
 	}

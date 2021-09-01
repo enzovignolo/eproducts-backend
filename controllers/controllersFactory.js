@@ -2,17 +2,15 @@
 Intended for reusing repetitive code.
 Here we can have normal CRUD operations over a DB Model in a simpler way
  */
-const db = require(`${__dirname}/../db/db`);
-exports.getAll = async (req, res, next, model) => {
+const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
+exports.getAll = async (req, res, next, Model) => {
 	try {
 		//Try to get all the products and send them if success
 
-		const data = await db.select().table(model);
+		const data = await Model.find();
 
 		if (!data) {
-			const error = new Error('No data was loaded');
-			error.stCode = 404;
-			throw error;
+			throw new ErrorCreator('No data was loaded', 404);
 		}
 		res.status(200).json({
 			status: 'success',
@@ -23,102 +21,87 @@ exports.getAll = async (req, res, next, model) => {
 		next(err);
 	}
 };
-exports.addOne = async (req, res, next, model) => {
+exports.addOne = async (req, res, next, Model) => {
 	try {
 		//Gets the new entry to the DB from the body
 		const newEntry = req.body;
 
-		const data = await db(model).insert(newEntry);
+		const data = await Model.create(newEntry);
 		//If the function did not return a product, there was an error
-		if (!data) throw new Error('Error writting in the DB');
+		if (!data) throw new ErrorCreator('Error writting in the DB', 500);
 
 		res.status(201).json({
 			status: 'success',
+			data,
 		});
 	} catch (err) {
 		next(err);
 	}
 };
 
-exports.updateOne = async (req, res, next, model) => {
+exports.updateOne = async (req, res, next, Model) => {
 	try {
 		const id = req.params.id;
 		const data = req.body;
 		//Check first if exist an entrey with that id
 
-		/* const updatedEntry = await Model.findByIdAndUpdate(id, data); */
-		const updatedEntry = await db(model).where('id', id).update(data);
+		const updatedEntry = await Model.findByIdAndUpdate(id, data, {
+			new: true,
+		});
+
 		if (!updatedEntry) {
-			const err = new Error(`Wrong id for ${model}`);
-			err.stCode = 404;
-			throw err;
+			throw new ErrorCreator(`Wrong id for ${Model.modelName}`, 404);
 		}
 		res.status(201).json({
 			status: 'success',
-			...updatedEntry,
+			data: updatedEntry,
 		});
 	} catch (err) {
+		console.log(err);
 		next(err);
 	}
 };
-exports.deleteOne = async (req, res, next, model) => {
+exports.deleteOne = async (req, res, next, Model) => {
 	try {
 		const id = req.params.id;
 		//Check if the product exists
-		const data = await db.where('id', id).select().table(model);
+		const data = await Model.findById(id);
 
 		console.log(data);
-		if (data.length <= 0) {
-			const error = new Error('There is no element with that id');
-			error.stCode = 404;
-			throw error;
+		if (!data) {
+			throw new ErrorCreator(
+				'There is no element with that id',
+				404
+			);
 		}
 		//Delete it
-		const deletedEntry = await db(model).where('id', id).del();
-		res.status(200).json({
+		const deletedEntry = await Model.findByIdAndDelete(id);
+		res.status(203).json({
 			status: 'success',
-			deleted: data,
 		});
 	} catch (err) {
 		next(err);
 	}
 };
 
-exports.getOne = async (req, res, next, model) => {
+exports.getOne = async (req, res, next, Model) => {
 	try {
 		const id = req.params.id;
-		//Looks for the product
-		//const data = await Model.findDataById(id);
+		//Looks for the data
 		let data;
-		if (model != 'carts') {
-			data = await db.where('id', id).select().table(model);
+		if (Model.modelName == 'Cart') {
+			/* Populate makes that products informations appears instead of 
+			an array of products ids*/
+			data = await Model.findById(id).populate('products');
 		} else {
-			const productsOnCart = await db
-				.from('cart_product')
-				.innerJoin(
-					'products',
-					'cart_product.product_id',
-					'products.id'
-				)
-				.select(
-					'products.id',
-					'products.name',
-					'products.price',
-					'products.stock',
-					'products.thumbnail'
-				)
-				.where('cart_product.cart_id', id);
-			let cart = [];
-			productsOnCart.forEach((product) => {
-				cart.push(product);
-			});
-			data = { cartId: id, products: cart };
+			data = await Model.findById(id);
 		}
 
-		if (data.length <= 0) {
-			const error = new Error('There is no element with that id');
-			error.stCode = 404;
-			throw error;
+		if (!data) {
+			throw new ErrorCreator(
+				'There is no element with that id',
+				404
+			);
 		}
 		res.status(200).json({
 			status: 'success',

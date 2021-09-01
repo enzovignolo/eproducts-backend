@@ -1,7 +1,5 @@
-const Archivo = require(`${__dirname}/../utils/Archivo`);
-
-const dbMsgs = new Archivo(`${__dirname}/../db/messages.txt`);
-const db = require(`${__dirname}/../db/db`);
+const Product = require(`${__dirname}/../models/productsModel.js`);
+const Message = require(`${__dirname}/../models/messagesModel.js`);
 
 /**
  *
@@ -11,7 +9,7 @@ const db = require(`${__dirname}/../db/db`);
 exports.getTable = async () => {
 	try {
 		//Search the products
-		const products = await db('products').select();
+		const products = await Product.find();
 		let message;
 		if (!products) {
 			message = 'There are no products loaded';
@@ -28,28 +26,7 @@ exports.getTable = async () => {
  */
 exports.updateMessages = async (msg) => {
 	try {
-		//format the date and time of the message and
-		//saves it to the db
-		const months = [
-			'Jan',
-			'Feb',
-			'Mar',
-			'Apr',
-			'May',
-			'Jun',
-			'Jul',
-			'Aug',
-			'Sept',
-			'Oct',
-			'Nov',
-			'Dec',
-		];
-		const dateTime = new Date();
-		const dateTimeMsg = `${dateTime.getDate()} ${
-			months[dateTime.getMonth()]
-		} | ${dateTime.getHours()}:${dateTime.getMinutes()}`;
-		await db('messages').insert({ ...msg, date: dateTimeMsg });
-		//
+		await Message.create(msg);
 	} catch (err) {
 		console.log(err);
 	}
@@ -60,7 +37,8 @@ exports.updateMessages = async (msg) => {
  */
 exports.getMessages = async () => {
 	try {
-		const messages = await db('messages').select();
+		const messages = await Message.find();
+
 		return messages;
 	} catch (err) {
 		console.log(err);

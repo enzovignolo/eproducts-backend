@@ -1,52 +1,48 @@
-const Archivo = require(`${__dirname}/../utils/Archivo`);
-const cartsModel = new Archivo(`${__dirname}/../db/carts.txt`);
-const productsModel = new Archivo(`${__dirname}/../db/products.txt`);
+const Cart = require(`${__dirname}/../models/cartsModel.js`);
+const Product = require(`${__dirname}/../models/productsModel.js`);
+const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
 const controllersFactory = require(`${__dirname}/controllersFactory`);
-const db = require(`${__dirname}/../db/db`);
+
 exports.getAllCarts = (req, res, next) => {
-	controllersFactory.getAll(req, res, next, 'carts');
+	controllersFactory.getAll(req, res, next, Cart);
 };
 exports.addCart = (req, res, next) => {
-	controllersFactory.addOne(req, res, next, 'carts');
+	controllersFactory.addOne(req, res, next, Cart);
 };
 
 exports.deleteCart = (req, res, next) => {
-	console.log(req.params.id);
-	controllersFactory.deleteOne(req, res, next, 'carts');
+	controllersFactory.deleteOne(req, res, next, Cart);
 };
 
 exports.getCart = (req, res, next) => {
-	controllersFactory.getOne(req, res, next, 'carts');
+	controllersFactory.getOne(req, res, next, Cart);
 };
 
 exports.addToCart = async (req, res, next) => {
 	try {
-		//Search cart by id
-		const cartId = req.params.id;
-
-		let cart = await db('carts').where('id', cartId).select();
-		if (cart.length <= 0) {
-			const err = Error('There is no cart with that id');
-			err.stCode = 404;
-			throw err;
-		}
-		//Search product by id
-		const prodId = req.body.productId;
-		const product = await db('products').where('id', prodId);
-		if (product.length <= 0) {
-			const err = new Error('There is no product with that id');
-			err.stCode = 404;
-			throw err;
+		const { cartId, productId } = req.params;
+		const product = await Product.findById(productId);
+		if (!product) {
+			throw new ErrorCreator(
+				'There is no product with that id',
+				404
+			);
 		}
 
-		const updatedCart = await db('cart_product').insert({
-			cart_id: cartId,
-			product_id: prodId,
-		});
+		console.log(cartId);
+		if (!(await Cart.findById(cartId))) {
+			throw new ErrorCreator('There is no cart with that id', 404);
+		}
+		const cart = await Cart.findByIdAndUpdate(
+			cartId,
+			{ $push: { products: product } },
+			{ new: true }
+		);
+
 		//Decrease one stock from product ? May be after checkout
 		res.status(200).json({
 			status: 'success',
-			updatedCart,
+			data: cart,
 		});
 	} catch (err) {
 		next(err);
@@ -55,22 +51,28 @@ exports.addToCart = async (req, res, next) => {
 exports.deleteFromCart = async (req, res, next) => {
 	try {
 		const { cartId, productId } = req.params;
-		const cart = await db('carts').where('id', cartId).select();
+		const cart = await Cart.findById(cartId);
 
 		if (!cart) {
-			const err = new Error('There is no cart with that id');
-			err.stCode = 404;
-			throw err;
+			throw new ErrorCreator('There is no cart with that id', 404);
 		}
-		const productDeleted = await db('cart_product')
-			.where({
-				cart_id: cartId,
-				product_id: productId,
-			})
-			.del();
-		res.status(200).json({ status: 'success' });
+		const product = await Product.findById(productId);
+		if (!product) {
+			throw new ErrorCreator(
+				'There is no product with that id',
+				404
+			);
+		}
+		if (!cart.products.includes(productId)) {
+			throw new ErrorCreator('That product is not in the cart', 400);
+		}
+		const updatedCart = await Cart.findByIdAndUpdate(
+			cartId,
+			{ $pull: { products: productId } },
+			{ new: true }
+		);
+		res.status(200).json({ status: 'success', data: updatedCart });
 	} catch (err) {
-		console.log('llegue al error');
 		next(err);
 	}
 };

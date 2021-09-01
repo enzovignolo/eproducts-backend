@@ -12,11 +12,12 @@ router
 router
 	.route('/:id')
 	.get(cartControllers.getCart)
-	.post(cartControllers.addToCart)
+
 	.delete(authControllers.isAdmin, cartControllers.deleteCart);
 
 router
 	.route('/:cartId/producto/:productId')
-	.delete(cartControllers.deleteFromCart);
+	.put(authControllers.isAdmin, cartControllers.addToCart)
+	.delete(authControllers.isAdmin, cartControllers.deleteFromCart);
 
 module.exports = router;

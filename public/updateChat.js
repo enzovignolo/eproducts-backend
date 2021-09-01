@@ -10,7 +10,9 @@ function updateChat(messages) {
         <p class="card-text"><%=message.message%></p>
         </div>
         </div>
-        <div style="padding-left:70%;"><small><%=message.date%></small></div>
+        <% const dateTime=new Date(message.date).toString().split(' ') %>
+        <% const time =dateTime[4].split(':') %>
+        <div style="padding-left:70%;"><small><%=dateTime[2]+'-'+dateTime[1]+' '+time[0]+':'+time[1] %></small></div>
 
         
 

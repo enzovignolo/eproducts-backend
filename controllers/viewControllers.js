@@ -1,10 +1,9 @@
-/* const Archivo = require(`${__dirname}/../utils/Archivo`);
-const db = new Archivo(`${__dirname}/../db/products.txt`); */
-const db = require(`${__dirname}/../db/db`);
+const Product = require(`${__dirname}/../models/productsModel.js`);
 exports.viewAllProducts = async (req, res, next) => {
 	try {
 		//Try to get all the products and send them if success
-		const products = await db('products').select();
+		/* const products = await db('products').select(); */
+		const products = await Product.find();
 		let message;
 		if (!products) {
 			message = 'There are no products loaded';
@@ -27,9 +26,10 @@ exports.viewAddProductForm = async (req, res, next) => {
 exports.addProduct = async (req, res, next) => {
 	try {
 		const newProduct = req.body;
-		newProduct['stock'] = 1;
+
 		//Write product
-		const product = await db('products').insert(newProduct);
+
+		const product = await Product.create(req.body);
 		//If the function did not return a product, there was an error
 		if (!product) throw new Error('Error writting in the DB');
 		res.redirect('/addProduct');
