@@ -1,0 +1,67 @@
+<div>
+    <h2 class='ml-4'>Fitler Search</h2>
+    <div class='col-sm-12'>
+        
+        <form id='filter-form'>
+        <div class='form-row'>
+            <div class='form-group col-sm-5'>
+                <label for='productName'>Name</label>
+                <input type='text' name='name' class='form-control' value=<%= query.name ? query.name : ''%>>
+                
+            </div>
+            <div class='form-group col-sm-3'>
+                <label for='productPrice'>Price Range</label>
+                <div class='input-group'>
+                    
+                    <input type='number' step=1 name='minPrice' class='form-control w-25' placeholder="min" value=<%=query.minPrice ? query.minPrice : ''%>  >
+                    <span class='input-group-text'>-</span>
+                    <input type="number" step=1 class='form-control w-25' name='maxPrice' placeholder="max" value=<%= query.maxPrice ? query.maxPrice : ''%>>
+
+                </div>
+
+            </div>
+           
+        </div>
+        <div class='form-row'>
+            <div class='form-group col-sm-5'>
+                <label for='productCategory'>Category</label>
+                <input type='text' name='category' class='form-control' value=<%= query.category ? query.category : ''%>>
+
+            </div>
+            <div class='form-group col-sm-3'>
+                <label for='productStock'>Stock range</label>
+                <div class='input-group'>
+                    <input type='number' step=1 name='minStock' class='form-control' placeholder="min" value=<%=query.minStock ? query.minStock : ''%>>
+                    <span class='input-group-text'> - </span>
+                    <input type="number" step=1 name='maxStock' class='form-control' placeholder="max" value=<%=query.maxStock ? query.maxStock : ''%>>
+
+                </div>
+                
+
+            </div>
+        </div>
+        <div class="form-row ">
+            <div class="form-group col-sm-5">
+
+                <select class="form-select form-select form-control" name='orderBy' aria-label=".form-select-lg ">
+                    <option selected value=''>Sort By</option>
+                    <option value='{"price":"desc"}'>Higher price</option>
+                    <option value='{"price":"asc"}'>Lower price</option>
+                    <option value='{"stock":"desc"}'>Higher Stock</option>
+                    <option value='{"stock":"asc"}'>Lower Stock</option>
+                  </select>
+            </div>
+
+        </div>
+        <button class='btn btn-info' type="submit">Apply Filter</button>
+        </form>
+    </div>
+    <script src="buildFilteredQuery.js"></script>
+    <script>
+        const form =document.getElementById('filter-form');
+        form.addEventListener('submit',(e)=>{
+            //e.preventDefault();
+           //queryBuilder(e);
+        });
+    </script>
+</div>

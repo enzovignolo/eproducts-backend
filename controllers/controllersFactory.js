@@ -2,12 +2,40 @@
 Intended for reusing repetitive code.
 Here we can have normal CRUD operations over a DB Model in a simpler way
  */
+
 const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
+
+const filterBuilder = (queryObj, arrayFilter) => {
+	let filter = {};
+	Object.keys(queryObj).map((queryFilter) => {
+		if (arrayFilter.includes(queryFilter)) {
+			filter[queryFilter] = queryObj[queryFilter];
+		}
+	});
+	return filter;
+};
+
 exports.getAll = async (req, res, next, Model) => {
 	try {
 		//Try to get all the products and send them if success
+		let filter = {};
+		let sortBy = {};
+		console.log(req.query);
+		//Build the filter from the query string
 
-		const data = await Model.find();
+		if (Model.modelName == 'Product') {
+			filter = filterBuilder(req.query, [
+				'_id',
+				'name',
+				'category',
+				'price',
+				'stock',
+			]);
+		}
+		if (req.query.sort) {
+			sortBy = req.query.sort;
+		}
+		const data = await Model.find(filter).sort(sortBy);
 
 		if (!data) {
 			throw new ErrorCreator('No data was loaded', 404);
@@ -18,6 +46,7 @@ exports.getAll = async (req, res, next, Model) => {
 			data,
 		});
 	} catch (err) {
+		console.log(err);
 		next(err);
 	}
 };

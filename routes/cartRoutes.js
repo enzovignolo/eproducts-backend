@@ -17,7 +17,7 @@ router
 
 router
 	.route('/:cartId/producto/:productId')
-	.put(authControllers.isAdmin, cartControllers.addToCart)
-	.delete(authControllers.isAdmin, cartControllers.deleteFromCart);
+	.put(cartControllers.addToCart)
+	.delete(cartControllers.deleteFromCart);
 
 module.exports = router;
