@@ -1,10 +1,11 @@
 const { Schema, model } = require('mongoose');
 
 const messageSchema = Schema({
-	user: {
-		type: String,
-		required: [true, 'Message must have a user'],
+	author: {
+		type: Schema.Types.ObjectId,
+		ref: 'User',
 	},
+
 	message: {
 		type: String,
 		required: [true, 'Message must have a message text'],

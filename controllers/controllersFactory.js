@@ -64,6 +64,7 @@ exports.addOne = async (req, res, next, Model) => {
 			data,
 		});
 	} catch (err) {
+		console.log(err);
 		next(err);
 	}
 };

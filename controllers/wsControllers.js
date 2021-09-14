@@ -1,5 +1,8 @@
 const Product = require(`${__dirname}/../models/productsModel.js`);
 const Message = require(`${__dirname}/../models/messagesModel.js`);
+const User = require(`${__dirname}/../models/usersModel.js`);
+const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
+const { schema, normalize } = require('normalizr');
 
 /**
  *
@@ -26,7 +29,12 @@ exports.getTable = async () => {
  */
 exports.updateMessages = async (msg) => {
 	try {
-		await Message.create(msg);
+		//Find user with the email from the msg
+		const user = await User.findOne({ email: msg.user });
+		if (!user)
+			throw new ErrorCreator(404, "There's no user with that email");
+		//Create new message in the database
+		await Message.create({ author: user._id, message: msg.message });
 	} catch (err) {
 		console.log(err);
 	}
@@ -37,9 +45,13 @@ exports.updateMessages = async (msg) => {
  */
 exports.getMessages = async () => {
 	try {
-		const messages = await Message.find();
+		const chats = await Message.find({}).populate('author');
+		const originalData = { id: 'messages', chat: chats };
+		const authors = new schema.Entity('authors');
 
-		return messages;
+		const normalizedData = normalize(originalData, authors);
+		console.log(normalizedData);
+		return { normalizedData, messages: chats };
 	} catch (err) {
 		console.log(err);
 	}

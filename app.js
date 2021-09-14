@@ -9,6 +9,7 @@ const productRoutes = require(`${__dirname}/routes/productRoutes`);
 const cartRoutes = require(`${__dirname}/routes/cartRoutes`);
 const authRoutes = require(`${__dirname}/routes/authRoutes`);
 const viewRoutes = require(`${__dirname}/routes/viewRoutes`);
+const userRoutes = require(`${__dirname}/routes/userRoutes`);
 
 //Initializing the app
 
@@ -31,6 +32,7 @@ app.use(express.static('public'));
 //Coderhouse backend course requirements.
 app.use('/api/v1/productos', productRoutes);
 app.use('/api/v1/carritos', cartRoutes);
+app.use('/api/v1/usuarios', userRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/', viewRoutes);
 //This is for unkown routes ERROR 404

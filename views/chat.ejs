@@ -53,8 +53,23 @@
     
     messageInput.value='';
   };
-  socket.on('new message',(newMessages)=>{
-    const html = updateChat(newMessages);
+  socket.on('new message',(chat)=>{
+    //denormalizing data
+    const {normalizedData} = chat;
+    const authors = new normalizr.schema.Entity('authors');
+    const denormalizedData =normalizr.denormalize(normalizedData.result,authors,normalizedData.entities);
+    console.log("-------OBJETO NORMALIZADO---------")
+    const normalizedLength = JSON.stringify(normalizedData).length;
+    console.log(normalizedLength);
+    console.log("-------OBJETO DENORMALIZADO---------")
+    const denormalizedLength = JSON.stringify(denormalizedData).length;
+    console.log(denormalizedLength);
+
+    const compression = Number(denormalizedLength)*(100/Number(normalizedLength));
+    console.log("COMPRESION:% ",Math.round(compression));
+    //updating the chat with the denormalized data
+    const html = updateChat(denormalizedData.chat);
+    
     document.getElementById('chat-box').innerHTML = html;
     //In order the chat-box goes to the last messsage(bottom)
   let chatBox = document.getElementById("chat-box");

@@ -3,7 +3,7 @@ function updateChat(messages) {
   <% messages.forEach(function(message){ %>
         <div class="card text-white bg-primary mb-3" style="max-width: 90%; margin:2%;" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="card-header">
-          <strong class="md-auto"><%=message.user%></strong> 
+          <strong class="md-auto"><%=message.author.email%></strong> 
 
         </div>
         <div class="card-body">
