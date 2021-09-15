@@ -2,6 +2,22 @@
 <%- include('partials/navbar')%> 
 <!-- FORM TO ADD A PRODUCT -->
 <div class="container-fluid" style="padding:0%">
+  <% if (message) { %>
+    <div class="alert alert-dismissible alert-success text-center row">
+      <div class='col-sm-2'>
+
+      </div>
+      <div class='col-sm-7'>
+        <strong> <%= message %> </strong> 
+
+      </div>
+      <div class='col-sm-2 pl-4'>
+        <form action="/logout" method="post">
+        <button type="submit" class="btn btn-warning">Log out</button>
+      </form>
+      </div>
+      </div>
+<% } %>
   <div class="product-form bg-light">
     
     <div class="row" >

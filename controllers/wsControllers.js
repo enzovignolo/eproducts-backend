@@ -50,7 +50,7 @@ exports.getMessages = async () => {
 		const authors = new schema.Entity('authors');
 
 		const normalizedData = normalize(originalData, authors);
-		console.log(normalizedData);
+
 		return { normalizedData, messages: chats };
 	} catch (err) {
 		console.log(err);

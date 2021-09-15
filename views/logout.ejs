@@ -1,0 +1,20 @@
+<%- include('layouts/header')%>
+<div class="d-flex justify-content-center flex-column text-center">
+
+    <div class="alert alert-dismissible alert-info">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        Goodbye <strong> <%= user %> </strong> 
+    </div>
+    <div class="p-4">
+
+        <small>You will be redirected after 5 seconds</small>
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+       
+       window.location = "/login?message=Logout%20successfully";
+    }, 5000);
+</script>
+
+<%- include('layouts/footer')%>

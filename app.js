@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const session = require('express-session');
 const ErrorCreator = require(`${__dirname}/utils/ErrorCreator.js`);
 const errorController = require(`${__dirname}/controllers/errorController.js`);
 /**
@@ -20,7 +21,18 @@ app.use(cors());
 //Parse Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-//
+//Session and cookies middlewares
+app.use(
+	session({
+		secret: 'coder session',
+		resave: true,
+		saveUninitialized: false,
+		cookie: {
+			maxAge: 60 * 1000,
+		},
+	})
+);
+
 //Setting template engine
 
 app.set('view engine', 'ejs');
@@ -33,7 +45,7 @@ app.use(express.static('public'));
 app.use('/api/v1/productos', productRoutes);
 app.use('/api/v1/carritos', cartRoutes);
 app.use('/api/v1/usuarios', userRoutes);
-app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/', authRoutes);
 app.use('/', viewRoutes);
 //This is for unkown routes ERROR 404
 app.use((req, res, next) => {

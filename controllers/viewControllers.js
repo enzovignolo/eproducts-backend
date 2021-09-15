@@ -1,4 +1,6 @@
 const Product = require(`${__dirname}/../models/productsModel.js`);
+const User = require(`${__dirname}/../models/usersModel.js`);
+const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
 
 exports.viewAllProducts = async (req, res, next) => {
 	try {
@@ -41,7 +43,9 @@ exports.viewAllProducts = async (req, res, next) => {
 
 exports.viewAddProductForm = async (req, res, next) => {
 	try {
-		res.render('addProduct.ejs');
+		//Check if there is any message to send
+		let message = req.query ? req.query.message : null;
+		res.render('addProduct.ejs', { message });
 	} catch (err) {
 		next(err);
 	}
@@ -49,8 +53,6 @@ exports.viewAddProductForm = async (req, res, next) => {
 
 exports.addProduct = async (req, res, next) => {
 	try {
-		const newProduct = req.body;
-
 		//Write product
 
 		const product = await Product.create(req.body);
@@ -64,4 +66,46 @@ exports.addProduct = async (req, res, next) => {
 
 exports.chatView = (req, res, next) => {
 	res.render('chat.ejs');
+};
+
+exports.loginForm = (req, res, next) => {
+	try {
+		let message = req.query ? req.query.message : null;
+		res.render('loginForm.ejs', { message });
+	} catch (err) {
+		console.log(err);
+	}
+};
+
+exports.login = async (req, res, next) => {
+	try {
+		const { email, password } = req.body;
+		const user = await User.findOne({ email });
+		if (!user) throw new ErrorCreator('User does not exist', 401);
+
+		if (user.password != password)
+			throw new ErrorCreator('Wrong password', 401);
+		req.session.isLogged = 'true';
+		req.session.user = user.name;
+
+		res.redirect(`/addProduct?message=Welcome ${user.name}`);
+	} catch (err) {
+		console.log(err);
+		res.redirect(`/login?message=${err.msg}`);
+	}
+};
+
+exports.isLogged = (req, res, next) => {
+	if (req.session.isLogged) {
+		next();
+	} else {
+		const message = 'You must be logged to see this page';
+		res.redirect(`/login?message=${message}`);
+	}
+};
+
+exports.logout = (req, res, next) => {
+	const user = req.session.user;
+	req.session.destroy();
+	res.render('logout.ejs', { user });
 };

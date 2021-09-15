@@ -8,7 +8,12 @@ router.route('/products').get(viewControllers.viewAllProducts);
 
 router
 	.route('/addProduct')
-	.get(viewControllers.viewAddProductForm)
+	.get(viewControllers.isLogged, viewControllers.viewAddProductForm)
 	.post(viewControllers.addProduct);
 
+router
+	.route('/login')
+	.get(viewControllers.loginForm)
+	.post(viewControllers.login);
+router.route('/logout').post(viewControllers.logout);
 module.exports = router;
