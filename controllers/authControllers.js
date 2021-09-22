@@ -10,6 +10,7 @@ exports.login = async (req, res, next) => {
 		if (user.password != password)
 			throw new ErrorCreator(401, 'Wrong password!');
 		req.session.isLogged = 'true';
+		req.session.user = user.email;
 		next();
 		//res.status(201).json({ status: 'logged!' });
 	} catch (err) {

@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
+const { DB_URI } = require(`${__dirname}/config/enviroment`);
 const ErrorCreator = require(`${__dirname}/utils/ErrorCreator.js`);
 const errorController = require(`${__dirname}/controllers/errorController.js`);
 /**
@@ -24,12 +26,17 @@ app.use(express.urlencoded({ extended: true }));
 //Session and cookies middlewares
 app.use(
 	session({
+		store: MongoStore.create({
+			mongoUrl: DB_URI,
+			autoRemove: 'disabled',
+		}),
 		secret: 'coder session',
-		resave: true,
-		saveUninitialized: false,
+		resave: false,
+		saveUninitialized: true,
 		cookie: {
-			maxAge: 60 * 1000,
+			maxAge: 60 * 1000 * 10,
 		},
+		rolling: true,
 	})
 );
 

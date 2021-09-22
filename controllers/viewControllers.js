@@ -33,6 +33,7 @@ exports.viewAllProducts = async (req, res, next) => {
 			query: req.query,
 			products,
 			message,
+			user: null,
 		});
 	} catch (err) {
 		//Handle errors
@@ -44,8 +45,8 @@ exports.viewAllProducts = async (req, res, next) => {
 exports.viewAddProductForm = async (req, res, next) => {
 	try {
 		//Check if there is any message to send
-		let message = req.query ? req.query.message : null;
-		res.render('addProduct.ejs', { message });
+		let user = req.session.userName;
+		res.render('addProduct.ejs', { user });
 	} catch (err) {
 		next(err);
 	}
@@ -71,7 +72,7 @@ exports.chatView = (req, res, next) => {
 exports.loginForm = (req, res, next) => {
 	try {
 		let message = req.query ? req.query.message : null;
-		res.render('loginForm.ejs', { message });
+		res.render('loginForm.ejs', { message, user: null });
 	} catch (err) {
 		console.log(err);
 	}
@@ -86,7 +87,8 @@ exports.login = async (req, res, next) => {
 		if (user.password != password)
 			throw new ErrorCreator('Wrong password', 401);
 		req.session.isLogged = 'true';
-		req.session.user = user.name;
+		req.session.userEmail = user.email;
+		req.session.userName = user.name;
 
 		res.redirect(`/addProduct?message=Welcome ${user.name}`);
 	} catch (err) {
@@ -96,6 +98,7 @@ exports.login = async (req, res, next) => {
 };
 
 exports.isLogged = (req, res, next) => {
+	console.log(req.session);
 	if (req.session.isLogged) {
 		next();
 	} else {
@@ -105,7 +108,7 @@ exports.isLogged = (req, res, next) => {
 };
 
 exports.logout = (req, res, next) => {
-	const user = req.session.user;
+	const user = req.session.userName;
 	req.session.destroy();
 	res.render('logout.ejs', { user });
 };
