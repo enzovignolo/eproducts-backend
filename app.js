@@ -5,6 +5,7 @@ const MongoStore = require('connect-mongo');
 const { DB_URI } = require(`${__dirname}/config/enviroment`);
 const ErrorCreator = require(`${__dirname}/utils/ErrorCreator.js`);
 const errorController = require(`${__dirname}/controllers/errorController.js`);
+const passport = require('passport');
 /**
  * Load routes
  */
@@ -39,6 +40,8 @@ app.use(
 		rolling: true,
 	})
 );
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Setting template engine
 

@@ -1,5 +1,6 @@
 const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
 const User = require(`${__dirname}/../models/usersModel.js`);
+
 exports.login = async (req, res, next) => {
 	try {
 		const { email, password } = req.body;

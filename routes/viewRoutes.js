@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const viewControllers = require(`${__dirname}/../controllers/viewControllers`);
-
+const passport = require('passport');
 const router = Router();
 
 //Products views
@@ -10,7 +10,10 @@ router
 	.route('/addProduct')
 	.get(viewControllers.isLogged, viewControllers.viewAddProductForm)
 	.post(viewControllers.addProduct);
-
+router
+	.route('/signup')
+	.get(viewControllers.signUpForm)
+	.post(viewControllers.signup);
 router
 	.route('/login')
 	.get(viewControllers.loginForm)
