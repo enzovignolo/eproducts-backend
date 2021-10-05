@@ -59,8 +59,8 @@ app.use('/api/v1/', authRoutes);
 app.use('/', viewRoutes);
 //This is for unkown routes ERROR 404
 app.use((req, res, next) => {
-	/* const error = new Error(`Route ${req.originalUrl} does not exist`);
-	error.stCode = 404; */
+	const error = new Error(`Route ${req.originalUrl} does not exist`);
+	error.stCode = 404;
 	next(new ErrorCreator('This route does not exist', 404));
 });
 

@@ -3,8 +3,14 @@ const User = require(`${__dirname}/../models/usersModel.js`);
 const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
+const {
+	SERVER_URL,
+	FB_APP_ID,
+	FB_SECRET,
+} = require(`${__dirname}/../config/enviroment.js`);
 
-//Defines strategy to use on login
+//Defines local strategy to use on login
 passport.use(
 	'login',
 	new LocalStrategy(async (username, password, done) => {
@@ -20,14 +26,13 @@ passport.use(
 		}
 	})
 );
-//Defines strategy to use on signup
+//Defines local strategy to use on signup
 passport.use(
 	'signup',
 	new LocalStrategy(
 		{ passReqToCallback: true },
 		async (req, username, password, done) => {
 			try {
-				console.log('signup llegue');
 				const user = await User.findOne({ email: username });
 				if (user)
 					done(null, false, {
@@ -50,34 +55,57 @@ passport.use(
 		}
 	)
 );
-
+//Defines facebook strategy to login
+passport.use(
+	'facebook',
+	new FacebookStrategy(
+		{
+			clientID: FB_APP_ID,
+			clientSecret: FB_SECRET,
+			callbackURL: `${SERVER_URL}/auth/callback`,
+			profileFields: [
+				'id',
+				'displayName',
+				'email',
+				'picture.type(large)',
+			],
+		},
+		async (accessToken, refreshToken, profile, done) => {
+			try {
+				if (!profile) throw Error('Error login with facebook');
+				console.log(profile.emails[0].value);
+				if (
+					!(await User.findOne({
+						email: profile.emails[0].value,
+					}))
+				) {
+					const randomPass = Math.random()
+						.toString(36)
+						.slice(-8);
+					await User.create({
+						email: profile.emails[0].value,
+						password: randomPass,
+						passwordConfirmation: randomPass,
+					});
+				}
+				console.log('asdas');
+				done(null, profile);
+			} catch (err) {
+				done(err, null);
+			}
+		}
+	)
+);
 ////
 passport.serializeUser((user, done) => {
-	done(null, { id: user._id, name: user.name });
+	done(null, { name: user.name, email: user.email });
 });
 
 passport.deserializeUser(async (serializedUser, done) => {
-	const user = await User.findById(serializedUser.id);
+	const user = await User.findOne({ email: serializedUser.email });
 	done(null, user);
 });
 exports.login = (req, res, next) => {
-	/* try {
-		const { username: email, password } = req.body;
-		const user = await User.findOne({ email });
-		if (!user) throw new ErrorCreator('User does not exist', 401);
-
-		if (user.password != password)
-			throw new ErrorCreator('Wrong password', 401);
-		req.session.isLogged = 'true';
-		req.session.userEmail = user.email;
-		req.session.userName = user.name;
-
-		res.redirect(`/addProduct?message=Welcome ${user.name}`);
-	} catch (err) {
-		console.log(err);
-		res.redirect(`/login?message=${err.msg}`);
-	} */
-
 	passport.authenticate('login', (err, user, info) => {
 		if (err) {
 			return next(err);
@@ -90,6 +118,39 @@ exports.login = (req, res, next) => {
 		});
 	})(req, res, next);
 };
+
+exports.fbAuth = (req, res, next) => {
+	passport.authenticate('facebook', { scope: 'email' })(req, res, next);
+};
+
+exports.fbCallback = (req, res, next) => {
+	try {
+		passport.authenticate(
+			'facebook',
+			{ failureRedirect: '/login?message=Facebook%20Error' },
+
+			(err, profile) => {
+				if (err) {
+					throw err;
+				}
+
+				const user = {
+					name: profile.displayName,
+					email: profile.emails[0].value,
+					photo: profile.photos[0].value,
+				};
+
+				req.logIn(user, (err) => {
+					res.render('fbSuccess.ejs', { user });
+				});
+			}
+		)(req, res, next);
+	} catch (err) {
+		console.log(err);
+		res.redirect('/login?message=Facebook%20Error');
+	}
+};
+
 exports.signup = (req, res, next) => {
 	passport.authenticate('signup', (err, user, info) => {
 		if (err) {
@@ -107,7 +168,7 @@ exports.signup = (req, res, next) => {
 exports.viewAllProducts = async (req, res, next) => {
 	try {
 		//Try to get all the products and send them if success
-		let user = req.session.passport?.user.name || null;
+		let user = req.session.passport?.user?.name || null;
 		const filter = {
 			name: req.query.name || /m*/,
 			category: req.query.category || /m*/,
@@ -147,7 +208,7 @@ exports.viewAllProducts = async (req, res, next) => {
 exports.viewAddProductForm = async (req, res, next) => {
 	try {
 		//Check if there is any message to send
-		console.log(req.session);
+
 		let user = req.session.passport.user.name;
 		res.render('addProduct.ejs', { user });
 	} catch (err) {
@@ -182,7 +243,6 @@ exports.loginForm = (req, res, next) => {
 };
 exports.signUpForm = (req, res, next) => {
 	try {
-		console.log('asda');
 		let message = req.query ? req.query.message : null;
 		res.render('signUpForm.ejs', { message, user: null });
 	} catch (err) {
@@ -190,11 +250,10 @@ exports.signUpForm = (req, res, next) => {
 	}
 };
 exports.isLogged = (req, res, next) => {
-	console.log('asdas');
+	console.log(req.session);
 	if (req.session.passport && req.session.passport.user) {
 		next();
 	} else {
-		console.log(req.session);
 		const message = 'You must be logged to see this page';
 		res.redirect(`/login?message=${message}`);
 	}

@@ -29,6 +29,11 @@ footer {
 #chat-box {
 	height: 300px;
 }
+.loginLogo {
+	width: 20px;
+	height: 20px;
+	margin-right: 5%;
+}
 @media (max-width: 600px) {
 	.messenger {
 		width: 100%;

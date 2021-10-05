@@ -1,0 +1,25 @@
+<%- include('layouts/header')%>
+<%- include('partials/navbar')%> 
+
+<div class="card mb-3 w-50 h-50 mx-auto text-center">
+    <h3 class="card-header"><%= user.name %></h3>
+    <div class="card-body">
+      <h5 class="card-title">Email</h5>
+      <h6 class="card-subtitle text-muted"><%= user.email %> </h6>
+    </div>
+    <div>
+
+        <img src=<%= user.photo %>  aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle" />
+    </div>
+
+    
+</div>
+<div class="card text-center">
+    <div class="card-body">
+   
+      <a href="/addProduct" class="card-link">Add products</a>
+    
+    </div>
+  </div>
+
+<%- include('layouts/footer')%>

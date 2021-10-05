@@ -1,0 +1,11 @@
+ENV='development'
+##Development enviroment
+FB_APP_ID =
+FB_SECRET =
+SERVER_URL_dev ='http://localhost:5000'
+PORT_dev = 5000
+DB_URI_dev= 
+DB_URI_dev_atlas = 
+
+##Production enviroment
+

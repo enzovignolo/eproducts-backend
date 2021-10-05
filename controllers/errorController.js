@@ -11,6 +11,7 @@ const sendError = (res, err) => {
 };
 
 exports.handleErrors = (err, req, res, next) => {
+	console.log(err);
 	if (err.name == 'CastError') {
 		err.msg = `Invalid value for ${err.path}`;
 		err.stCode = 400;
