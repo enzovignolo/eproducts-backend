@@ -1,0 +1,14 @@
+<%- include('layouts/header')%>
+<%- include('partials/navbar')%> 
+<div class="w-50 mx-auto mbt-4 text-center">
+
+    <h1>Random count</h1>
+    <% for(key in randomCount){ %> 
+    <div>
+    <li> <%= key %> : <%= randomCount[key] %>  </li>
+    </div>
+    <% } %> 
+</div>
+
+
+<%- include('layouts/footer')%>

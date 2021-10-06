@@ -9,7 +9,8 @@ const {
 	FB_APP_ID,
 	FB_SECRET,
 } = require(`${__dirname}/../config/enviroment.js`);
-
+const getRandomCount = require(`${__dirname}/../utils/getRandomCount.js`);
+const { fork } = require('child_process');
 //Defines local strategy to use on login
 passport.use(
 	'login',
@@ -263,4 +264,32 @@ exports.logout = (req, res, next) => {
 	const user = req.session.passport.user.name;
 	req.session.destroy();
 	res.render('logout.ejs', { user });
+};
+exports.getInfo = (req, res, next) => {
+	const info = {
+		'Sistema operativo': process.platform,
+		'Version de node': process.version,
+		'Uso de memoria': process.memoryUsage().heapTotal,
+		'Camino de ejecución': process.execPath,
+		'Directorio actual': process.cwd(),
+		'Process id': process.pid,
+	};
+
+	res.render('info.ejs', { user: null, info });
+};
+
+exports.randoms = (req, res, next) => {
+	const cant = req.query.cant || 1000;
+	let randomCount;
+	const forkedChild = fork(`${__dirname}/../utils/getRandomCount.js`, {
+		env: { cant },
+	});
+	forkedChild.on('message', (count) => {
+		randomCount = count.randomCount;
+
+		res.render('randoms.ejs', {
+			user: null,
+			randomCount,
+		});
+	});
 };

@@ -59,7 +59,13 @@ io.on('connection', async (socket) => {
 		console.log(err);
 	}
 });
+process.on('SIGINT', () => {
+	process.exit(0);
+});
 
+process.on('exit', (code) => {
+	console.log(`\nProceso terminado con código de salida:${code}`);
+});
 server.listen(PORT, () => {
 	console.log(`[OK] Server running on port ${PORT}`);
 });

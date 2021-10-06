@@ -23,4 +23,9 @@ router.route('/auth/callback').get(viewControllers.fbCallback);
 
 router.route('/fbLogin').post(viewControllers.fbAuth);
 router.route('/logout').post(viewControllers.logout);
+
+router.route('/info').get(viewControllers.getInfo);
+
+router.route('/randoms').get(viewControllers.randoms);
+
 module.exports = router;

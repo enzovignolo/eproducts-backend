@@ -1,0 +1,29 @@
+<%- include('layouts/header')%>
+<%- include('partials/navbar')%> 
+
+<div class="w-75 mx-auto mt-4 mb-4">
+
+    <div class="accordion" id="accordionExample">
+        <% let i=0;  %> 
+        <% for(let key in info){ %> 
+      <div class="accordion-item">
+        <h2 class="accordion-header" >
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#<%=key.split(' ').join('')%>" aria-expanded="false" aria-controls="<%=key.split(' ').join('')%>">
+            <%= key %> 
+          </button>
+        </h2>
+        <div id="<%=key.split(' ').join('') %>" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
+          <div class="accordion-body">
+            <strong><%= info[key] %> </strong> 
+          </div>
+        </div>
+      </div>
+      <% i++ %> 
+      <% } %> 
+     
+      
+    </div>
+</div>
+
+
+<%- include('layouts/footer')%>
