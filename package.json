@@ -5,7 +5,13 @@
 	"main": "server.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "nodemon server.js"
+		"start": "nodemon server.js",
+		"forever": "forever start -w server.js",
+		"forever:stop": "forever stopall",
+		"pm2:fork": "pm2 start server.js --watch && pm2 list",
+		"pm2:cluster": "pm2 start server.js --watch -i max && pm2 list",
+		"pm2:stop": "pm2 stop all",
+		"pm2:delete": "pm2 delete all"
 	},
 	"author": "Enzo Vignolo",
 	"license": "ISC",
@@ -18,7 +24,7 @@
 		"express": "^4.17.1",
 		"express-handlebars": "^5.3.2",
 		"express-session": "^1.17.2",
-		"knex": "^0.21.21",
+		"knex": "^0.95.11",
 		"mongoose": "^6.0.3",
 		"mysql": "^2.18.1",
 		"mysql2": "^2.3.0",
@@ -29,7 +35,8 @@
 		"pug": "^3.0.2",
 		"regenerator-runtime": "^0.13.9",
 		"socket.io": "^4.1.3",
-		"typescript": "^4.3.5"
+		"typescript": "^4.3.5",
+		"winston": "^3.3.3"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.14.8",

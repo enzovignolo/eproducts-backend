@@ -1,15 +1,15 @@
 const Product = require(`${__dirname}/../models/productsModel.js`);
 const User = require(`${__dirname}/../models/usersModel.js`);
-const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
+const numOfCpus = require('os').cpus().length;
 const {
 	SERVER_URL,
 	FB_APP_ID,
 	FB_SECRET,
 } = require(`${__dirname}/../config/enviroment.js`);
-const getRandomCount = require(`${__dirname}/../utils/getRandomCount.js`);
+//const getRandomCount = require(`${__dirname}/../utils/getRandomCount.js`);
 const { fork } = require('child_process');
 //Defines local strategy to use on login
 passport.use(
@@ -268,6 +268,7 @@ exports.logout = (req, res, next) => {
 exports.getInfo = (req, res, next) => {
 	const info = {
 		'Sistema operativo': process.platform,
+		'Numero de procesadores': numOfCpus,
 		'Version de node': process.version,
 		'Uso de memoria': process.memoryUsage().heapTotal,
 		'Camino de ejecución': process.execPath,

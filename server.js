@@ -3,12 +3,44 @@ const http = require('http');
 const app = require(`${__dirname}/app`);
 const wsController = require(`${__dirname}/controllers/wsControllers.js`);
 const mongoose = require('mongoose');
-const { PORT, DB_URI } = require(`${__dirname}/config/enviroment.js`);
+const cluster = require('cluster');
+const numOfCpus = require('os').cpus().length;
+const {
+	PORT,
+	DB_URI,
+	SERVER_MODE,
+} = require(`${__dirname}/config/enviroment.js`);
+
+//Creates http server at port indicated on .env or 3000
+let server;
+
+if (SERVER_MODE == 'CLUSTER') {
+	if (cluster.isMaster) {
+		console.log('Inicializando el servidor en modo cluster');
+		console.log(`PID MASTER ${process.pid}`);
+		for (let i = 0; i < numOfCpus; i++) {
+			cluster.fork();
+		}
+	} else {
+		server = http.createServer(app);
+		server.listen(PORT, () => {
+			console.log(
+				`[OK] Server running on port ${PORT} , process id: ${process.pid}`
+			);
+		});
+	}
+} else {
+	console.log('Inicializando servidor modo hijo');
+	server = http.createServer(app);
+	server.listen(PORT, () => {
+		console.log(`[OK] Server running on port ${PORT}`);
+	});
+}
+
 //DB connection and initizalization
 
 (async () => {
 	try {
-		console.log(DB_URI);
 		await mongoose.connect(DB_URI);
 		console.log('[OK] Database connected');
 	} catch (err) {
@@ -16,10 +48,6 @@ const { PORT, DB_URI } = require(`${__dirname}/config/enviroment.js`);
 		console.log(err);
 	}
 })();
-
-//Creates http server at port indicated on .env or 3000
-
-const server = http.createServer(app);
 
 //Initialized the websocket server
 const io = new Server(server);
@@ -65,7 +93,4 @@ process.on('SIGINT', () => {
 
 process.on('exit', (code) => {
 	console.log(`\nProceso terminado con código de salida:${code}`);
-});
-server.listen(PORT, () => {
-	console.log(`[OK] Server running on port ${PORT}`);
 });

@@ -9,7 +9,6 @@ const getRandomCount = (cant) => {
 	return randomCount;
 };
 const randomCount = getRandomCount(process.env.cant);
-console.log(randomCount);
 process.send({ randomCount });
 
 module.exports = getRandomCount;
