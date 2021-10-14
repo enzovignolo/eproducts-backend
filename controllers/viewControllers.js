@@ -5,6 +5,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const numOfCpus = require('os').cpus().length;
 const {
+	PORT,
 	SERVER_URL,
 	FB_APP_ID,
 	FB_SECRET,
@@ -274,6 +275,7 @@ exports.getInfo = (req, res, next) => {
 		'Camino de ejecución': process.execPath,
 		'Directorio actual': process.cwd(),
 		'Process id': process.pid,
+		Puerto: PORT,
 	};
 
 	res.render('info.ejs', { user: null, info });

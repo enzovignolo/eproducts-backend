@@ -11,7 +11,8 @@
 		"pm2:fork": "pm2 start server.js --watch && pm2 list",
 		"pm2:cluster": "pm2 start server.js --watch -i max && pm2 list",
 		"pm2:stop": "pm2 stop all",
-		"pm2:delete": "pm2 delete all"
+		"pm2:delete": "pm2 delete all",
+		"pm2:nginx": "pm2 start server.js -n Server_1 -i max -w -- PORT=8081 && pm2 start server.js -n Server_2 -w -- PORT=8082"
 	},
 	"author": "Enzo Vignolo",
 	"license": "ISC",
