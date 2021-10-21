@@ -17,6 +17,7 @@
 	"author": "Enzo Vignolo",
 	"license": "ISC",
 	"dependencies": {
+		"compression": "^1.7.4",
 		"connect-mongo": "^4.6.0",
 		"core-js": "^3.16.0",
 		"cors": "^2.8.5",
@@ -26,6 +27,7 @@
 		"express-handlebars": "^5.3.2",
 		"express-session": "^1.17.2",
 		"knex": "^0.95.11",
+		"log4js": "^6.3.0",
 		"mongoose": "^6.0.3",
 		"mysql": "^2.18.1",
 		"mysql2": "^2.3.0",

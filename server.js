@@ -6,6 +6,11 @@ const mongoose = require('mongoose');
 const cluster = require('cluster');
 const numOfCpus = require('os').cpus().length;
 const {
+	loggerConsole,
+	warnToFile,
+	errorToFile,
+} = require(`${__dirname}/logger.js`);
+const {
 	PORT,
 	DB_URI,
 	SERVER_MODE,
@@ -16,24 +21,32 @@ let server;
 
 if (SERVER_MODE == 'CLUSTER') {
 	if (cluster.isMaster) {
-		console.log('Inicializando el servidor en modo cluster');
-		console.log(`PID MASTER ${process.pid}`);
+		/* console.log('Inicializando el servidor en modo cluster');
+		console.log(`PID MASTER ${process.pid}`); */
+		loggerConsole.info('Inicializando el servidor en modo cluster');
+		loggerConsole.info(`PID MASTER ${process.pid}`);
 		for (let i = 0; i < numOfCpus; i++) {
 			cluster.fork();
 		}
 	} else {
 		server = http.createServer(app);
 		server.listen(PORT, () => {
-			console.log(
+			loggerConsole.info(
 				`[OK] Server running on port ${PORT} , process id: ${process.pid}`
 			);
+			/* console.log(
+				`[OK] Server running on port ${PORT} , process id: ${process.pid}`
+			); */
 		});
 	}
 } else {
-	console.log('Inicializando servidor modo hijo');
+	//console.log('Inicializando servidor modo hijo');
+	loggerConsole.info('Inicializando servidor modo hijo');
+
 	server = http.createServer(app);
 	server.listen(PORT, () => {
-		console.log(`[OK] Server running on port ${PORT}`);
+		loggerConsole.info(`[OK] Server running on port ${PORT}`);
+		/* console.log(`[OK] Server running on port ${PORT}`); */
 	});
 }
 
@@ -42,10 +55,15 @@ if (SERVER_MODE == 'CLUSTER') {
 (async () => {
 	try {
 		await mongoose.connect(DB_URI);
-		console.log('[OK] Database connected');
+		loggerConsole.info('[OK] Database connected');
+		//console.log('[OK] Database connected');
 	} catch (err) {
-		console.error('[ERROR]');
-		console.log(err);
+		/* console.error('[ERROR]');
+		console.log(err); */
+		loggerConsole.warn('Error with the connection to the DB');
+		warnToFile.warn('Error with the connection to the DB');
+		loggerConsole.error(err.message);
+		errorToFile.error(err.message);
 	}
 })();
 
@@ -80,11 +98,15 @@ io.on('connection', async (socket) => {
 
 				io.emit('new message', messages);
 			} catch (err) {
-				console.log(err);
+				//console.log(err);
+				loggerConsole.error(err.message);
+				errorToFile.error(err.message);
 			}
 		});
 	} catch (err) {
-		console.log(err);
+		//console.log(err);
+		loggerConsole.error(err.message);
+		errorToFile.error(err.message);
 	}
 });
 process.on('SIGINT', () => {
@@ -92,5 +114,7 @@ process.on('SIGINT', () => {
 });
 
 process.on('exit', (code) => {
-	console.log(`\nProceso terminado con código de salida:${code}`);
+	//console.log(`\nProceso terminado con código de salida:${code}`);
+	loggerConsole.warn(`Proceso terminado con código de salida:${code}`);
+	warnToFile.warn(`Proceso terminado con código de salida:${code}`);
 });

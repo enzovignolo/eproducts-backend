@@ -1,10 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const { DB_URI } = require(`${__dirname}/config/enviroment`);
 const ErrorCreator = require(`${__dirname}/utils/ErrorCreator.js`);
 const errorController = require(`${__dirname}/controllers/errorController.js`);
+
 const passport = require('passport');
 /**
  * Load routes
@@ -21,6 +23,7 @@ const app = express();
 
 //Security middlewares
 app.use(cors());
+app.use(compression());
 //Parse Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
