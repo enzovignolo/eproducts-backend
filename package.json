@@ -5,7 +5,9 @@
 	"main": "server.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
+		"test:auto": "node benchmark.js",
 		"start": "nodemon server.js",
+		"0xstart": "0x server.js",
 		"forever": "forever start -w server.js",
 		"forever:stop": "forever stopall",
 		"pm2:fork": "pm2 start server.js --watch && pm2 list",
@@ -17,6 +19,7 @@
 	"author": "Enzo Vignolo",
 	"license": "ISC",
 	"dependencies": {
+		"autocannon": "^7.5.0",
 		"compression": "^1.7.4",
 		"connect-mongo": "^4.6.0",
 		"core-js": "^3.16.0",

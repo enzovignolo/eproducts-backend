@@ -10,7 +10,7 @@ const {
 	FB_APP_ID,
 	FB_SECRET,
 } = require(`${__dirname}/../config/enviroment.js`);
-//const getRandomCount = require(`${__dirname}/../utils/getRandomCount.js`);
+const getRandomCount = require(`${__dirname}/../utils/getRandomCount.js`);
 const { fork } = require('child_process');
 //Defines local strategy to use on login
 passport.use(
@@ -283,8 +283,14 @@ exports.getInfo = (req, res, next) => {
 
 exports.randoms = (req, res, next) => {
 	const cant = req.query.cant || 1000;
-	let randomCount;
-	const forkedChild = fork(`${__dirname}/../utils/getRandomCount.js`, {
+	const randomCount = getRandomCount(cant);
+	res.render('randoms.ejs', {
+		user: null,
+		randomCount,
+	});
+
+	//Commented forkChild for coderhouse challenge
+	/* const forkedChild = fork(`${__dirname}/../utils/getRandomCount.js`, {
 		env: { cant },
 	});
 	forkedChild.on('message', (count) => {
@@ -294,5 +300,5 @@ exports.randoms = (req, res, next) => {
 			user: null,
 			randomCount,
 		});
-	});
+	}); */
 };
