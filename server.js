@@ -44,7 +44,7 @@ if (SERVER_MODE == 'CLUSTER') {
 	loggerConsole.info('Inicializando servidor modo hijo');
 
 	server = http.createServer(app);
-	server.listen(PORT, () => {
+	server.listen(process.env.PORT || PORT, () => {
 		loggerConsole.info(`[OK] Server running on port ${PORT}`);
 		/* console.log(`[OK] Server running on port ${PORT}`); */
 	});
