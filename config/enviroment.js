@@ -24,7 +24,7 @@ if (process.env.ENV == 'development' || !process.env.ENV) {
 } else if (process.env.ENV == 'production') {
 	PORT = PORT || process.env.PORT_prod;
 	DB_URI = process.env.DB_URI_prod;
-	SERVER_URL = `${process.env.SERVER_URL_dev}:${PORT}`;
+	SERVER_URL = `https://eproducts.herokuapp.com/products`;
 }
 
 module.exports = {

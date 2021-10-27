@@ -4,6 +4,7 @@ const passport = require('passport');
 const router = Router();
 
 //Products views
+router.route('/', (req, res) => res.redirect('/products'));
 router.route('/products').get(viewControllers.viewAllProducts);
 
 router
