@@ -4,7 +4,6 @@ const passport = require('passport');
 const router = Router();
 
 //Products views
-router.route('/', (req, res) => res.redirect('/products'));
 router.route('/products').get(viewControllers.viewAllProducts);
 
 router
@@ -28,5 +27,6 @@ router.route('/logout').post(viewControllers.logout);
 router.route('/info').get(viewControllers.getInfo);
 
 router.route('/randoms').get(viewControllers.randoms);
+router.route('/').get((req, res) => res.redirect('/products'));
 
 module.exports = router;
