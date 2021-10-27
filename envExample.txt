@@ -1,11 +1,15 @@
-ENV='development'
+ENV='production'
 ##Development enviroment
-FB_APP_ID =
-FB_SECRET =
-SERVER_URL_dev ='http://localhost:5000'
+FB_APP_ID ='531675404596689'
+FB_SECRET ='81b529d496f38b2df4609afd45813a4c'
+SERVER_URL_dev ='http://localhost'
 PORT_dev = 5000
-DB_URI_dev= 
-DB_URI_dev_atlas = 
+DB_URI_dev= "mongodb://localhost:27017/ecommerce"
+DB_URI_dev_atlas = ""
+
+
 
 ##Production enviroment
-
+DB_URI_prod = ''
+SERVER_URL_prod ='http://localhost'
+PORT_prod = 5000
