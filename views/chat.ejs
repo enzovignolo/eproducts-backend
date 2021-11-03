@@ -16,7 +16,7 @@
       <div class="messenger-form">
         <div class="form-group ">
           <div class="input-group chat-input">
-            <input name="user" type="email" class="form-control form-control-sm col-sm-3" id="message-user"  placeholder="user@example.com" required>
+            <input name="user" type="email" class="form-control form-control-sm col-sm-3" id="message-user"  placeholder="user@example.com" value=<%= email %>  >
           </div>
           <div class="input-group chat-input">
       
@@ -68,6 +68,7 @@
     const compression = Number(denormalizedLength)*(100/Number(normalizedLength));
     console.log("COMPRESION:% ",Math.round(compression));
     //updating the chat with the denormalized data
+    console.log(denormalizedData.chat)
     const html = updateChat(denormalizedData.chat);
     
     document.getElementById('chat-box').innerHTML = html;

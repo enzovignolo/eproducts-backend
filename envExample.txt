@@ -13,3 +13,16 @@ DB_URI_dev_atlas = ""
 DB_URI_prod = ''
 SERVER_URL_prod ='http://localhost'
 PORT_prod = 5000
+
+
+##Notification services vairables
+ETHEREAL_HOST='smtp.ethereal.email'
+ETHEREAL_PORT=587
+ETHEREAL_USER='kory.white31@ethereal.email'
+ETHEREAL_PASS='eGHurwPw9ZD9yBsMFf'
+GMAIL_USER='enzocoder@gmail.com'
+GMAIL_PASS = '36469798Cabu!'
+TWILIO_SID ='AC0b684f0a79203e79f0cac17d1bb0a404'
+TWILIO_TOKEN ='1deab989502adb3cf5137c2ef9b7e79c'
+TWILIO_NUMBER='+18283325950'
+TWILIO_ADMIN_NUMBER ='+543794903152'

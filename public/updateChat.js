@@ -1,6 +1,10 @@
 function updateChat(messages) {
-	let msgTemplate = ` <% if(messages){%>
+  console.log('chateandooooooo', messages);
+  let msgTemplate = ` <% if(messages){%>
   <% messages.forEach(function(message){ %>
+      <% if(!message.author){%>
+        <% message.author={email:'anonimo'}%>
+        <% }%>
         <div class="card text-white bg-primary mb-3" style="max-width: 90%; margin:2%;" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="card-header">
           <strong class="md-auto"><%=message.author.email%></strong> 
@@ -25,6 +29,6 @@ function updateChat(messages) {
 
         </div>
         <%};%> `;
-	const html = ejs.render(msgTemplate, { messages: messages });
-	return html;
+  const html = ejs.render(msgTemplate, { messages: messages });
+  return html;
 }

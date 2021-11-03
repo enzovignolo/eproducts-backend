@@ -7,11 +7,11 @@ exports.login = async (req, res, next) => {
 		const user = await User.findOne({ email });
 		if (!user) throw new ErrorCreator(401, 'Wrong email');
 
-		console.log(user.password);
 		if (user.password != password)
 			throw new ErrorCreator(401, 'Wrong password!');
 		req.session.isLogged = 'true';
 		req.session.user = user.email;
+
 		next();
 		//res.status(201).json({ status: 'logged!' });
 	} catch (err) {
