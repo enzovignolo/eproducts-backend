@@ -13,6 +13,7 @@ const MAILING = {
   ETHEREAL_PASS: process.env.ETHEREAL_PASS,
   GMAIL_USER: process.env.GMAIL_USER,
   GMAIL_PASS: process.env.GMAIL_PASS,
+  ADMIN_EMAIL: process.env.ADMIN_EMAIL,
 };
 const TWILIO = {
   ACCOUNT_SID: process.env.TWILIO_SID,
