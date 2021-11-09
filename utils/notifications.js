@@ -85,16 +85,33 @@ exports.sendSms = async (
   }
 };
 
+exports.sendWhatsapp = async (body, to) => {
+  try {
+    console.log(TWILIO.WHATSAPP);
+    await twilioClient.messages.create({
+      from: TWILIO.WHATSAPP,
+      body: body,
+      to: `whatsapp:${to}`,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.notifyPurchase = async (user, productList) => {
   try {
     console.log(productList);
-    htmlText =
+    let htmlText =
       '<h2> Estamos preparando su pedido con los siguientes productos</h2>';
+    let whatsappText =
+      'Estamos preparando su pedido con los siguientes productos:\n';
     productList.forEach((el) => {
       console.log(el);
       htmlText = htmlText + `<li>${el}</li>`;
+      whatsappText = whatsappText + `${el}\n`;
     });
     console.log(htmlText);
+    await this.sendWhatsapp(whatsappText, TWILIO.ADMIN_WHATSAPP);
     await this.sendEthEmail(
       `Nuevo pedido de ${user.email}`,
       htmlText,

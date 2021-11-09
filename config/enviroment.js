@@ -20,6 +20,8 @@ const TWILIO = {
   AUTH_TOKEN: process.env.TWILIO_TOKEN,
   NUMBER: process.env.TWILIO_NUMBER,
   ADMIN_NUMBER: process.env.TWILIO_ADMIN_NUMBER,
+  WHATSAPP: process.env.TWILIO_WHATSAPP,
+  ADMIN_WHATSAPP: process.env.TWILIO_ADMIN_WHATSAPP,
 };
 
 let SERVER_MODE;
