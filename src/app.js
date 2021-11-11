@@ -47,7 +47,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //Setting template engine
-
+app.set('views', `${__dirname}/views`);
 app.set('view engine', 'ejs');
 //Static files
 app.use(express.static('public'));
