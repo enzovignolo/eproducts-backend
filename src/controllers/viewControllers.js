@@ -180,6 +180,7 @@ exports.signup = (req, res, next) => {
 exports.viewAllProducts = async (req, res, next) => {
   try {
     //Try to get all the products and send them if success
+
     let user = req.session.passport?.user?.name || null;
     const filter = {
       name: req.query.name || /m*/,

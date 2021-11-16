@@ -2,12 +2,17 @@ const express = require('express');
 const cors = require('cors');
 const compression = require('compression');
 const session = require('express-session');
+const { graphqlHTTP } = require('express-graphql');
 const MongoStore = require('connect-mongo');
 const { DB_URI } = require(`${__dirname}/config/enviroment`);
 const ErrorCreator = require(`${__dirname}/utils/ErrorCreator.js`);
 const errorController = require(`${__dirname}/controllers/errorController.js`);
-
+const {
+  ProductSchema,
+  ProductResolver,
+} = require(`${__dirname}/graphql/productSchema`);
 const passport = require('passport');
+const Product = require('./models/productsModel');
 /**
  * Load routes
  */
@@ -27,6 +32,7 @@ app.use(compression());
 //Parse Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+//GraphQL
 //Session and cookies middlewares
 app.use(
   session({
@@ -54,6 +60,14 @@ app.use(express.static('public'));
 //
 //Routes
 //Routes names are in Spanish in order to comply
+app.use(
+  '/graphql',
+  graphqlHTTP({
+    schema: ProductSchema,
+    rootValue: ProductResolver,
+    graphiql: true,
+  })
+);
 //Coderhouse backend course requirements.
 app.use('/api/v1/productos', productRoutes);
 app.use('/api/v1/carritos', cartRoutes);
