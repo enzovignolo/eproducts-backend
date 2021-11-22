@@ -1,16 +1,15 @@
-const { deleteFromCart } = require('../services/cartServices');
 
 const User = require(`${__dirname}/../models/usersModel`);
 
 const Cart = require(`${__dirname}/../models/cartsModel.js`);
 const Product = require(`${__dirname}/../models/productsModel.js`);
-const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
-const { addToCart } = require(`${__dirname}/../services/cartServices`);
+const ErrorCreator = require(`${__dirname}/../../utils/ErrorCreator.js`);
+const { addToCart, deleteFromCart} = require(`${__dirname}/../../services/cartServices`);
 const {
   getAll,
   getOne,
   addOne,
-} = require(`${__dirname}/../services/factoryServices`);
+} = require(`${__dirname}/../../services/factoryServices`);
 exports.getAllCarts = async (req, res, next) => {
   try {
     const carts = await getAll(req.query, Cart);

@@ -1,7 +1,7 @@
 const Product = require(`${__dirname}/../models/productsModel.js`);
 const Message = require(`${__dirname}/../models/messagesModel.js`);
 const User = require(`${__dirname}/../models/usersModel.js`);
-const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
+const ErrorCreator = require(`${__dirname}/../../utils/ErrorCreator.js`);
 const { schema, normalize } = require('normalizr');
 
 /**
@@ -46,12 +46,12 @@ exports.updateMessages = async (msg) => {
 exports.getMessages = async () => {
 	try {
 		const chats = await Message.find({}).populate('author');
-		const originalData = { id: 'messages', chat: chats };
+		/* const originalData = { id: 'messages', chat: chats };
 		const authors = new schema.Entity('authors');
 
-		const normalizedData = normalize(originalData, authors);
+		const normalizedData = normalize(originalData, authors); */
 
-		return { normalizedData, messages: chats };
+		return  chats ;
 	} catch (err) {
 		console.log(err);
 	}

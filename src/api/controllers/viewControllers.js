@@ -9,14 +9,14 @@ const {
   SERVER_URL,
   FB_APP_ID,
   FB_SECRET,
-} = require(`${__dirname}/../config/enviroment.js`);
-const getRandomCount = require(`${__dirname}/../utils/getRandomCount.js`);
+} = require(`${__dirname}/../../config/enviroment.js`);
+const getRandomCount = require(`${__dirname}/../../utils/getRandomCount.js`);
 const { fork } = require('child_process');
 const {
   sendEthEmail,
   sendGmailEmail,
   sendSms,
-} = require(`${__dirname}/../utils/notifications.js`);
+} = require(`${__dirname}/../../utils/notifications.js`);
 //Defines local strategy to use on login
 passport.use(
   'login',

@@ -4,7 +4,7 @@ const {
   getOne,
   deleteOne,
   addOne,
-} = require(`${__dirname}/../services/factoryServices`);
+} = require(`${__dirname}/../../services/factoryServices`);
 
 const Product = require(`${__dirname}/../models/productsModel.js`);
 exports.getAllProducts = async (req, res, next) => {

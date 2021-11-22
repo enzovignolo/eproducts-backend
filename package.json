@@ -4,7 +4,7 @@
   "description": "Desafio entregable para CH BackEnd Course",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --detectOpenHandles",
     "test:auto": "node src/benchmark.js",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
@@ -20,6 +20,7 @@
   "author": "Enzo Vignolo",
   "license": "ISC",
   "dependencies": {
+    "@shelf/jest-mongodb": "^2.1.0",
     "autocannon": "^7.5.0",
     "compression": "^1.7.4",
     "connect-mongo": "^4.6.0",

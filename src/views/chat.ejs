@@ -43,6 +43,7 @@
   var socket = io();
   /* document.getElementById('send-message').addEventListener('click',(e)=>{ */
   function sendMessage(){
+    
     const userInput = document.getElementById("message-user");
     const messageInput = document.getElementById("message-text");
     const message = {
@@ -50,12 +51,13 @@
       message: messageInput.value
     };
     socket.emit('message sent',message);
-    
+   
     messageInput.value='';
   };
   socket.on('new message',(chat)=>{
+    console.log('aaaaaaaa',chat);
     //denormalizing data
-    const {normalizedData} = chat;
+    /* const {normalizedData} = chat;
     const authors = new normalizr.schema.Entity('authors');
     const denormalizedData =normalizr.denormalize(normalizedData.result,authors,normalizedData.entities);
     console.log("-------OBJETO NORMALIZADO---------")
@@ -68,8 +70,8 @@
     const compression = Number(denormalizedLength)*(100/Number(normalizedLength));
     console.log("COMPRESION:% ",Math.round(compression));
     //updating the chat with the denormalized data
-    console.log(denormalizedData.chat)
-    const html = updateChat(denormalizedData.chat);
+    console.log(denormalizedData.chat) */
+    const html = updateChat(chat);
     
     document.getElementById('chat-box').innerHTML = html;
     //In order the chat-box goes to the last messsage(bottom)

@@ -71,11 +71,12 @@ exports.getOne = async (id, Model) => {
     let data;
     if (Model.modelName == 'Cart') {
       /* Populate makes that products informations appears instead of 
-              an array of products ids*/
+      an array of products ids*/
       data = await Model.findById(id).populate('products');
     } else {
       data = await Model.findById(id);
     }
+    console.log('holaaaaaaa',data);
 
     if (!data) {
       throw new ErrorCreator('There is no element with that id', 404);
