@@ -39,7 +39,7 @@ const io = new Server(server);
 io.on('connect',(socket)=>{socketController(io,socket)});
 (async () => {
   try {
-    console.log(io);
+    
     await mongoose.connect(DB_URI);
     loggerConsole.info('[OK] Database connected');
     //console.log('[OK] Database connected');
