@@ -1,34 +1,16 @@
-const User = require(`${__dirname}/../models/usersModel`);
-const mongoose = require('mongoose');
-const Cart = require(`${__dirname}/../models/cartsModel.js`);
-const Product = require(`${__dirname}/../models/productsModel.js`);
+const Cart = require(`${__dirname}/../api/models/cartsModel.js`);
+const Product = require(`${__dirname}/../api/models/productsModel.js`);
+const User = require(`${__dirname}/../api/models/usersModel.js`);
 const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
-const controllersFactory = require(`${__dirname}/controllersFactory`);
 
-exports.getAllCarts = (req, res, next) => {
-  controllersFactory.getAll(req, res, next, Cart);
-};
-exports.addCart = (req, res, next) => {
-  controllersFactory.addOne(req, res, next, Cart);
-};
-
-exports.deleteCart = (req, res, next) => {
-  controllersFactory.deleteOne(req, res, next, Cart);
-};
-
-exports.getCart = (req, res, next) => {
-  controllersFactory.getOne(req, res, next, Cart);
-};
-
-exports.addToCart = async (req, res, next) => {
+exports.addToCart = async (id, productId) => {
   try {
-    const { id, productId } = req.params;
     const product = await Product.findById(productId);
-    console.log('id', id);
-    console.log('productId', productId);
+
     if (!product) {
       throw new ErrorCreator('There is no product with that id', 404);
     }
+    console.log('idddd', id);
     const user = await User.findById(id);
     if (!user) {
       throw new ErrorCreator('There is no user with that id', 404);
@@ -40,17 +22,14 @@ exports.addToCart = async (req, res, next) => {
     );
 
     //Decrease one stock from product ? May be after checkout
-    res.status(200).json({
-      status: 'success',
-      data: cart,
-    });
+    return cart;
   } catch (err) {
-    next(err);
+    throw err;
   }
 };
-exports.deleteFromCart = async (req, res, next) => {
+
+exports.deleteFromCart = async (id, productId) => {
   try {
-    const { id, productId } = req.params;
     const user = await User.findById(id);
 
     if (!user) {
@@ -71,7 +50,7 @@ exports.deleteFromCart = async (req, res, next) => {
     ).populate({
       path: 'products',
     });
-    res.status(200).json({ status: 'success', data: updatedCart });
+    return updatedCart;
   } catch (err) {
     next(err);
   }

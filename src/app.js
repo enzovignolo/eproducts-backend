@@ -5,17 +5,17 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const { DB_URI } = require(`${__dirname}/config/enviroment`);
 const ErrorCreator = require(`${__dirname}/utils/ErrorCreator.js`);
-const errorController = require(`${__dirname}/controllers/errorController.js`);
+const errorController = require(`${__dirname}/api/controllers/errorController.js`);
 
 const passport = require('passport');
 /**
  * Load routes
  */
-const productRoutes = require(`${__dirname}/routes/productRoutes`);
-const cartRoutes = require(`${__dirname}/routes/cartRoutes`);
-const authRoutes = require(`${__dirname}/routes/authRoutes`);
-const viewRoutes = require(`${__dirname}/routes/viewRoutes`);
-const userRoutes = require(`${__dirname}/routes/userRoutes`);
+const productRoutes = require(`${__dirname}/api/routes/productRoutes`);
+const cartRoutes = require(`${__dirname}/api/routes/cartRoutes`);
+const authRoutes = require(`${__dirname}/api/routes/authRoutes`);
+const viewRoutes = require(`${__dirname}/api/routes/viewRoutes`);
+const userRoutes = require(`${__dirname}/api/routes/userRoutes`);
 
 //Initializing the app
 
@@ -47,7 +47,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //Setting template engine
-
+app.set('views', `${__dirname}/views`);
 app.set('view engine', 'ejs');
 //Static files
 app.use(express.static('public'));

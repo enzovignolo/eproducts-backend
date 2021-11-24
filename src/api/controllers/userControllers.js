@@ -1,11 +1,23 @@
 const Cart = require(`${__dirname}/../models/cartsModel.js`);
-const controllersFactory = require(`${__dirname}/controllersFactory.js`);
+
 const cartControllers = require(`${__dirname}/cartControllers.js`);
 const User = require(`${__dirname}/../models/usersModel.js`);
-const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
-const notifications = require(`${__dirname}/../utils/notifications.js`);
-exports.getAllUsers = (req, res, next) => {
-  controllersFactory.getAll(req, res, next, User);
+const ErrorCreator = require(`${__dirname}/../../utils/ErrorCreator.js`);
+const notifications = require(`${__dirname}/../../utils/notifications.js`);
+const {
+  getAll,
+  getOne,
+  updateOne,
+} = require(`${__dirname}/../../services/factoryServices`);
+exports.getAllUsers = async (req, res, next) => {
+  /*   controllersFactory.getAll(req, res, next, User);
+   */
+  try {
+    const users = await getAll(req.query, User);
+    return res.status(200).json(users);
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.addUser = async (req, res, next) => {
@@ -33,7 +45,7 @@ exports.getUserCart = async (req, res, next) => {
       path: 'cart',
       populate: { path: 'products' },
     });
-    console.log(user.cart);
+
     if (!user) throw new ErrorCreator(404, 'There is no user with that id');
     if (!user.cart) {
       const cart = await Cart.create({});
@@ -73,14 +85,32 @@ exports.updateUserCart = (req, res, next) => {
 exports.deleteFromUserCart = (req, res, next) => {
   cartControllers.deleteFromCart(req, res, next);
 };
-exports.getUser = (req, res, next) => {
-  controllersFactory.getOne(req, res, next, User);
+exports.getUser = async (req, res, next) => {
+  try {
+    const user = await getOne(req.params.id, User);
+    return res.status(200).json(user);
+  } catch (err) {
+    next(err);
+  }
+  /*  controllersFactory.getOne(req, res, next, User); */
 };
 
-exports.updateUser = (req, res, next) => {
-  controllersFactory.updateOne(req, res, next, User);
+exports.updateUser = async (req, res, next) => {
+  try {
+    const updatedUser = await updateOne(req.params.id, req.body, User);
+    return res.status(200).json(updatedUser);
+  } catch (err) {
+    next(err);
+  }
 };
 
-exports.deleteUser = (req, res, next) => {
-  controllersFactory.deleteOne(req, res, next, User);
+exports.deleteUser = async (req, res, next) => {
+  try {
+    await deleteOne(req.params.id, User);
+    return res.status(203).json({ status: 'success' });
+  } catch (err) {
+    next(err);
+  }
+  /*   controllersFactory.deleteOne(req, res, next, Product);
+   */
 };
