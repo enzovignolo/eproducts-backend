@@ -1,16 +1,17 @@
 const { Router } = require('express');
-const productControllers = require(`${__dirname}/../controllers/productControllers`);
+const {productControllers} = require('../controllers/index');
 const authControllers = require(`${__dirname}/../controllers/authControllers`);
 const router = Router();
 
+console.log('routers',productControllers)
 router
 	.route('/')
 	.get(productControllers.getAllProducts)
-	.post(authControllers.isAdmin, productControllers.addProduct);
+	.post(authControllers.isAdmin, productControllers.createProduct);
 
 router
 	.route('/:id')
-	.get(productControllers.getProduct)
+	.get(productControllers.getOneProduct)
 	.put(authControllers.isAdmin, productControllers.updateProduct)
-	.delete(authControllers.isAdmin, productControllers.deleteProduct);
+	.delete(authControllers.isAdmin, productControllers.updateProduct);
 module.exports = router;

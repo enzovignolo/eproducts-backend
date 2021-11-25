@@ -1,60 +1,59 @@
-const {
-  getAll,
-  updateOne,
-  getOne,
-  deleteOne,
-  addOne,
-} = require(`${__dirname}/../../services/factoryServices`);
+const services = require('../../services/index');
 
-const Product = require(`${__dirname}/../models/productsModel.js`);
-exports.getAllProducts = async (req, res, next) => {
-  /* 	controllersFactory.getAll(req, res, next, Product);
-   */ try {
-    const products = await getAll(req.query, Product);
-    console.log(products);
-    return res.status(200).json({ products });
-  } catch (err) {
-    next(err);
-  }
-};
+const productControllers = (services)=>{
+  const {productServices} = services;
+  return {
+    async getAllProducts(req,res,next){
+      try {
+        console.log('servicios',productServices)
+        const products = await productServices.getAllProducts();
+        res.status(200).json({products})
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
 
-exports.getProduct = async (req, res, next) => {
-  try {
-    const user = await getOne(req.params.id, Product);
-    return res.status(200).json(user);
-  } catch (err) {
-    next(err);
-  }
-  /*  controllersFactory.getOne(req, res, next, User); */
-};
+    },
+    async getOneProduct(req,res,next){
+      try {
+        const product = await productServices.getOneProduct(req.params.id);
+        res.status(200).json({product})
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
 
-exports.addProduct = async (req, res, next) => {
-  try {
-    const newProduct = await addOne(req.body, Product);
-    return res.status(201).json(newProduct);
-  } catch (err) {
-    next(err);
-  }
-  /*   controllersFactory.addOne(req, res, next, Product);
-   */
-};
+    },
+    async createProduct(req,res,next){
+      try {
+        const product = await productServices.createProduct(req.body);
+        res.status(201).json({product})
+      } catch (err) {
+        console.log(err);
+        throw err;        
+      }
 
-exports.updateProduct = async (req, res, next) => {
-  try {
-    const updatedProduct = await updateOne(req.params.id, req.body, Product);
-    return res.status(200).json(updatedProduct);
-  } catch (err) {
-    next(err);
-  }
-};
+    },async updateProduct(req,res,next){
+      try {
+        const product = await productServices.updateProduct(req.params.id,req.body);
+        res.status(200).json({product})
+      } catch (err) {
+        console.log(err);
+        throw err; 
+      }
 
-exports.deleteProduct = async (req, res, next) => {
-  try {
-    await deleteOne(req.params.id, Product);
-    return res.status(203).json({ status: 'success' });
-  } catch (err) {
-    next(err);
+    },
+    async deleteProduct(req,res,next){
+      try {
+        const product = await productServices.deleteProduct(req.params.id,req.body);
+        res.status(203).json({status:'deleted'})
+      } catch (err) {
+        console.log(err);
+        throw err; 
+      }
+
+    }
   }
-  /*   controllersFactory.deleteOne(req, res, next, Product);
-   */
-};
+}
+
+module.exports = productControllers;
