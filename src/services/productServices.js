@@ -1,20 +1,20 @@
 const Product = require('../api/models/productsModel');
-const productServices = (productRepository)=>{
-    return {
+const productServices =({productRepository})=>({
+
       async getAllProducts(){
         try {
-            
-          return await productRepository.getAllProducts(Product);
-          //return products;
+          
+          return await productRepository.getAll(Product);
+          
         } catch (err) {
           console.log(err);
           throw err;
         }
   
       },
-      async getOneProduct(req,res,next){
+      async getOneProduct(id){
         try {
-          const product = await productRepository.getOneProduct(req.params.id);
+          const product = await productRepository.getById(Product,id);
           return product
         } catch (err) {
           console.log(err);
@@ -22,18 +22,19 @@ const productServices = (productRepository)=>{
         }
   
       },
-      async createProduct(req,res,next){
+      async createProduct(data){
         try {
-          const product = await productRepository.createProduct(req.body);
+          const product = await productRepository.createData(Product,data);
           return product;
         } catch (err) {
           console.log(err);
           throw err;        
         }
   
-      },async updateProduct(req,res,next){
+      },
+      async updateProduct(id,data){
         try {
-          const product = await productRepository.updateProduct(req.params.id,req.body);
+          const product = await productRepository.updateById(Product,id,data);
           return product;
         } catch (err) {
           console.log(err);
@@ -41,17 +42,24 @@ const productServices = (productRepository)=>{
         }
   
       },
-      async deleteProduct(req,res,next){
+      async deleteProduct(id){
         try {
-          const product = await productRepository.deleteProduct(req.params.id,req.body);
+          const product = await productRepository.deleteById(Product,id);
           return;
         } catch (err) {
           console.log(err);
           throw err; 
         }
   
+      },
+      async getFilteredProducts(queryObj){
+        try {
+            const products = await productRepository.getFiltered(queryObj);
+            return products;
+        } catch (err) {
+            
+        }
       }
-    }
-  }
+    })
 
-module.exports = productServices;
+    module.exports = productServices

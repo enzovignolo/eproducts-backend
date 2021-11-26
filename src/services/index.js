@@ -1,5 +1,6 @@
-const ProductServices = require('./productServices');
-const productRepository = require('../api/repository/productRepository');
+const productServices = require('./productServices');
+const repository = require('../api/repository/index');
+console.log('repo',repository);
 module.exports = {
-    productServices:new ProductServices(productRepository)
+    productServices:productServices(repository)
 }

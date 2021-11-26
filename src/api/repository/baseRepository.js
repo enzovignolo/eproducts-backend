@@ -33,8 +33,8 @@ exports.createData = async(Model,newData)=>{
 
 exports.updateById = async(Model,id,data)=>{
     try {
-        const data = await Model.findByIdAndUpdate(id,data,{new:true});
-        return data
+        const updatedData = await Model.findByIdAndUpdate(id,data,{new:true});
+        return updatedData;
     } catch (err) {
         console.log(err);
         throw err
@@ -44,6 +44,7 @@ exports.updateById = async(Model,id,data)=>{
 exports.deleteById = async(Model,id)=>{
     try {
         await Model.findByIdAndDelete(id);
+        
         return;
     } catch (err) {
         console.log(err);

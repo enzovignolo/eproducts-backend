@@ -45,11 +45,21 @@ const productControllers = (services)=>{
     },
     async deleteProduct(req,res,next){
       try {
-        const product = await productServices.deleteProduct(req.params.id,req.body);
+        const product = await productServices.deleteProduct(req.params.id);
         res.status(203).json({status:'deleted'})
       } catch (err) {
         console.log(err);
         throw err; 
+      }
+
+    },
+    async getFilteredProducts(req,res,next){
+      try {
+        const products = await productServices.getFilteredProducts(req.query);
+        res.status(200).json({products})
+      } catch (err) {
+        console.log(err);
+        throw err;
       }
 
     }
