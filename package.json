@@ -33,6 +33,7 @@
     "express-session": "^1.17.2",
     "knex": "^0.95.11",
     "log4js": "^6.3.0",
+    "minimist": "^1.2.5",
     "mongoose": "^6.0.3",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.0",

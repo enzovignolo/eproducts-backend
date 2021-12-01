@@ -1,7 +1,8 @@
 const dotenv = require('dotenv');
 
-dotenv.config();
-
+dotenv.config({path:`${process.env.NODE_ENV}.env`});
+console.log(`${process.env.NODE_ENV}.env`)
+console.log(process.env)
 let PORT, DB_URI, SERVER_URL;
 let FB_APP_ID = process.env.FB_APP_ID;
 let FB_SECRET = process.env.FB_SECRET;

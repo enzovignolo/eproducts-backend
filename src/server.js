@@ -4,6 +4,7 @@ const https = require('https');
 const app = require(`${__dirname}/app`);
 const mongoose = require('mongoose');
 const {Server} =require('socket.io');
+const minimist = require('minimist')
 const socketController = require(`${__dirname}/socket/socketController.js`)
 const {
   loggerConsole,
@@ -15,6 +16,13 @@ const {
   DB_URI
 } = require(`${__dirname}/config/enviroment.js`);
 
+
+const args =  minimist(process.argv.slice(2),{
+  default:{
+    port:8080
+  }
+})
+console.log(args.port);
 //Creates http server at port indicated on .env or 3000
 const server = https.createServer(
   {
@@ -23,9 +31,9 @@ const server = https.createServer(
   },
   app
   );
-server.listen(PORT, () => {
+server.listen(args.port, () => {
     loggerConsole.info(
-      `[OK] Server running on port ${PORT} , process id: ${process.pid}`
+      `[OK] Server running on port ${args.port} , process id: ${process.pid}`
       );
       /* console.log(
         `[OK] Server running on port ${PORT} , process id: ${process.pid}`

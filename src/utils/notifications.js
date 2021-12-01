@@ -3,6 +3,7 @@ const { Twilio } = require('twilio');
 /* const twilio = require('twilio'); */
 
 const { MAILING, TWILIO } = require(`${__dirname}/../config/enviroment.js`);
+console.log('ASSSSSSSS',MAILING)
 const ethTransport = nodemailer.createTransport({
   host: MAILING.ETHEREAL_HOST,
   port: MAILING.ETHEREAL_PORT,
