@@ -1,14 +1,14 @@
-const Cart = require(`${__dirname}/../models/cartsModel.js`);
+const Cart = require('../models/cartsModel.js');
 
-const cartControllers = require(`${__dirname}/cartControllers.js`);
-const User = require(`${__dirname}/../models/usersModel.js`);
-const ErrorCreator = require(`${__dirname}/../../utils/ErrorCreator.js`);
-const notifications = require(`${__dirname}/../../utils/notifications.js`);
+const cartControllers = require('./cartControllers.js');
+const User = require('../models/usersModel.js');
+const ErrorCreator = require('../../utils/ErrorCreator');
+const notifications = require('../../utils/notifications.js');
 const {
   getAll,
   getOne,
   updateOne,
-} = require(`${__dirname}/../../services/factoryServices`);
+} = require('../../services/factoryServices');
 exports.getAllUsers = async (req, res, next) => {
   /*   controllersFactory.getAll(req, res, next, User);
    */

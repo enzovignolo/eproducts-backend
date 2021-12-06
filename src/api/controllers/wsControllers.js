@@ -1,7 +1,7 @@
-const Product = require(`${__dirname}/../models/productsModel.js`);
-const Message = require(`${__dirname}/../models/messagesModel.js`);
-const User = require(`${__dirname}/../models/usersModel.js`);
-const ErrorCreator = require(`${__dirname}/../../utils/ErrorCreator.js`);
+const Product = require('../models/productsModel');
+const Message = require('../models/messagesModel');
+const User = require('../models/usersModel');
+const ErrorCreator = require('../../utils/ErrorCreator');
 const { schema, normalize } = require('normalizr');
 
 /**

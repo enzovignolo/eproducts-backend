@@ -1,11 +1,11 @@
 
 const { sendSms } = require('../utils/notifications');
-const wsController = require(`${__dirname}/../api/controllers/wsControllers.js`);
+const wsController = require('../api/controllers/wsControllers');
 const {
     loggerConsole,
     warnToFile,
     errorToFile,
-  } = require(`${__dirname}/../logs/logger.js`);
+  } = require('../logs/logger');
 
 
 //On every connection event, we create a socket TCP

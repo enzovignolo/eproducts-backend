@@ -1,5 +1,5 @@
-const Product = require(`${__dirname}/../models/productsModel.js`);
-const User = require(`${__dirname}/../models/usersModel.js`);
+const Product = require('../models/productsModel');
+const User = require('../models/usersModel');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
@@ -9,14 +9,14 @@ const {
   SERVER_URL,
   FB_APP_ID,
   FB_SECRET,
-} = require(`${__dirname}/../../config/enviroment.js`);
-const getRandomCount = require(`${__dirname}/../../utils/getRandomCount.js`);
+} = require('../../config/enviroment.js');
+const getRandomCount = require('../../utils/getRandomCount.js');
 const { fork } = require('child_process');
 const {
   sendEthEmail,
   sendGmailEmail,
   sendSms,
-} = require(`${__dirname}/../../utils/notifications.js`);
+} = require('../../utils/notifications.js');
 //Defines local strategy to use on login
 passport.use(
   'login',

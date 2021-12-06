@@ -3,8 +3,8 @@
  * to every model
  */
 
-const filterBuilder = require(`${__dirname}/../utils/filterBuilder.js`);
-const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
+const filterBuilder = require('../utils/filterBuilder');
+const ErrorCreator = require('../utils/ErrorCreator');
 /**
  *
  * @param {Query obj} queryObj to use as a filter

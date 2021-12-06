@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const viewControllers = require(`${__dirname}/../controllers/viewControllers`);
+const viewControllers = require('../controllers/viewControllers');
 const passport = require('passport');
 const router = Router();
 

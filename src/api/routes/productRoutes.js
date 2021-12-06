@@ -1,9 +1,9 @@
 const { Router } = require('express');
 const {productControllers} = require('../controllers/index');
-const authControllers = require(`${__dirname}/../controllers/authControllers`);
+const authControllers = require('../controllers/authControllers');
 const router = Router();
 
-console.log('routers',productControllers)
+
 router
 	.route('/')
 	.get(productControllers.getAllProducts)

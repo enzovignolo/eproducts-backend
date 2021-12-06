@@ -1,19 +1,19 @@
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
-const app = require(`${__dirname}/app`);
+const app = require('./app');
 const mongoose = require('mongoose');
 const {Server} =require('socket.io');
-const socketController = require(`${__dirname}/socket/socketController.js`)
+const socketController = require('./socket/socketController')
 const {
   loggerConsole,
   warnToFile,
   errorToFile,
-} = require(`${__dirname}/logs/logger.js`);
+} = require('./logs/logger.js');
 const {
   PORT,
   DB_URI
-} = require(`${__dirname}/config/enviroment.js`);
+} = require('./config/enviroment.js');
 
 //Creates http server at port indicated on .env or 3000
 const server = https.createServer(
