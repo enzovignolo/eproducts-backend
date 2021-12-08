@@ -7,9 +7,8 @@ const MongoStore = require('connect-mongo');
 const { DB_URI } = require('./config/enviroment');
 const ErrorCreator = require('./utils/ErrorCreator');
 const errorController = require('./api/controllers/errorController');
-
+const {ProductSchema, ProductResolver} = require('./graphql/productSchema');
 const passport = require('passport');
-const Product = require('./models/productsModel');
 /**
  * Load routes
  */
@@ -49,7 +48,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //Setting template engine
-app.set('views', './views');
+app.set('views', './src/views');
 app.set('view engine', 'ejs');
 //Static files
 app.use(express.static('public'));

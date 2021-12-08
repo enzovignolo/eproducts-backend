@@ -1,6 +1,6 @@
 const { buildSchema } = require('graphql');
 const mongoose = require('mongoose');
-const Product = require(`${__dirname}/../models/productsModel.js`);
+const Product = require('../api/models/productsModel');
 exports.ProductSchema = buildSchema(`
     type Query{
         products:[Product],
@@ -9,8 +9,10 @@ exports.ProductSchema = buildSchema(`
     }
     type Mutation {
         addProduct(input:ProductInput):Product
+        updateProduct(_id:String!, data:ProductUpdate):Product
 
     }
+    
     type Product{
         _id:String!
         name: String,
@@ -27,6 +29,14 @@ exports.ProductSchema = buildSchema(`
 		price: Int!,
 		thumbnail:String,
     }
+    input ProductUpdate{
+      name:String,
+      category:String,
+      stock:Int,
+      price:Int,
+      thumbnail:String
+    }
+    
     
 
 
@@ -61,9 +71,25 @@ const addProduct = async ({ input }) => {
   }
 };
 
+const updateProduct = async (input)=>{
+  try {
+    const {_id,data}= input;
+    console.log('la data',data);
+    console.log('id',_id);
+   const updatedProduct= await Product.findByIdAndUpdate(_id,JSON.parse(JSON.stringify(data)),{new:true});
+    if(!updatedProduct) throw new Error('No product with that id');
+    return updatedProduct;
+
+
+  } catch (err) {
+    console.log(err)
+    return err;
+  }
+}
 exports.ProductResolver = {
   hello: () => 'hi',
   product: getProduct,
   products: getAllProducts,
   addProduct: addProduct,
+  updateProduct:updateProduct
 };
