@@ -1,7 +1,7 @@
-const Cart = require(`${__dirname}/../models/cartsModel.js`);
-const Product = require(`${__dirname}/../models/productsModel.js`);
-const User = require(`${__dirname}/../models/usersModel.js`);
-const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
+const Cart = require('../api/models/cartsModel');
+const Product = require('../api/models/productsModel');
+const User = require('../api/models/usersModel');
+const ErrorCreator = require('../utils/ErrorCreator');
 
 exports.addToCart = async (id, productId) => {
   try {

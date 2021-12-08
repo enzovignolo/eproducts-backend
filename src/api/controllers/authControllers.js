@@ -1,7 +1,7 @@
-const ErrorCreator = require(`${__dirname}/../utils/ErrorCreator.js`);
-const User = require(`${__dirname}/../models/usersModel.js`);
-const Cart = require(`${__dirname}/../models/cartsModel.js`);
-const notifications = require(`${__dirname}/../utils/notifications.js`);
+const ErrorCreator = require('../../utils/ErrorCreator.js');
+const User = require('../models/usersModel.js');
+const Cart = require('../models/cartsModel.js');
+const notifications = require('../../utils/notifications.js');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 passport.use(
